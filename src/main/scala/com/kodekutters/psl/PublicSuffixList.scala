@@ -159,9 +159,8 @@ final class PublicSuffixList(val index: Index, val url: URL, val charset: Codec)
    */
   def checkPublicSuffix(domain: String, expected: String): Unit = {
     getRegistrableDomain(domain) match {
-      case None => println("domain: " + domain + " expected: " + expected + " pass: " + Option(expected).isEmpty)
-      case Some(mtch) => println("match: " + mtch + " domain: " + domain + " expected: " + expected + " pass: " +
-        (mtch.toLowerCase == expected))
+      case None => println(Option(expected).isEmpty + "  domain: " + domain + " expected: " + expected)
+      case Some(mtch) => println((mtch.toLowerCase == expected)+ "  domain: " + domain + " expected: " + expected)
     }
   }
 
