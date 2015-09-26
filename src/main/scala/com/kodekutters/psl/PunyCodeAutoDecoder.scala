@@ -5,8 +5,8 @@ import java.net.IDN
 /**
  * Automatic Punycode Codec.
  *
- * This codec remembers at {@link PunycodeAutoDecoder#decode(String)} whether the input was encoded or not.
- * The {@link PunycodeAutoDecoder#recode(String)} method will return the same format as the original input.
+ * This codec remembers the input type as encoded or not.
+ * The recode() method will return the same format as the original input.
  *
  */
 final class PunycodeAutoDecoder() {
@@ -16,7 +16,7 @@ final class PunycodeAutoDecoder() {
   private var decoded = false
 
   /**
-   * Decodes a domain name into UTF-8 if it is in Punycode ASCII.
+   * Decodes a domain name into UTF-8 if it was originally in Punycode ASCII.
    *
    * If the domain name is already UTF-8 no change occurs.
    * The original format (Punycode or UTF-8) is saved in {@link #decoded}.

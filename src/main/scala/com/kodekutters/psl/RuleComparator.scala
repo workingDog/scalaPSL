@@ -4,7 +4,7 @@ package com.kodekutters.psl
 /**
  * Orders prevailing rules higher.
  *
- * The rule with the highest {@link Rule#getLabelCount()} is the prevailing rule.
+ * The rule with the highest getLabelCount is the prevailing rule.
  * An exception rule is always the prevailing rule.
  */
 object RuleComparator extends Ordering[Rule] {

@@ -5,18 +5,6 @@ import com.typesafe.config.{ConfigFactory, Config}
 import scala.io.Codec
 
 
-/**
- * API for the Public Suffix List.
- *
- * Use the API with UTF-8 domain names or Punycode encoded ASCII domain names.
- * The API will return the results in the same type as the input.
- *
- * references:
- * https://publicsuffix.org/
- * https://github.com/whois-server-list/public-suffix-list <-- the main java code source
- * https://github.com/wrangr/psl
- */
-
 object PublicSuffixList {
 
   /**
@@ -66,7 +54,15 @@ object PublicSuffixList {
 }
 
 /**
- * Initializes the Public List API.
+ * The Public Suffix List API.
+ *
+ * Use the methods with UTF-8 domain names or Punycode encoded ASCII domain names.
+ * The methods will return the results in the same type as the input.
+ *
+ * references:
+ * https://publicsuffix.org/
+ * https://github.com/whois-server-list/public-suffix-list <-- the main java code source
+ * https://github.com/wrangr/psl
  *
  * @param index    the rule index
  * @param url      the Public Suffix List url
@@ -76,7 +72,7 @@ object PublicSuffixList {
 final class PublicSuffixList(val index: Index, val url: URL, val charset: Codec) {
 
   /**
-   * Gets the registrable domain.
+   * gets the registrable domain.
    *
    * E.g. "www.example.net" and "example.net" will return "example.net".
    * Null, and empty string or domains with a leading dot will return None.
@@ -106,7 +102,7 @@ final class PublicSuffixList(val index: Index, val url: URL, val charset: Codec)
   }
 
   /**
-   * Returns whether a domain is registrable.
+   * determines if a domain is registrable.
    *
    * E.g. "example.net" is registrable, "www.example.net" and "net" are not.
    *
@@ -116,7 +112,7 @@ final class PublicSuffixList(val index: Index, val url: URL, val charset: Codec)
   def isRegistrable(domain: String): Boolean = getRegistrableDomain(domain).exists(d => domain.toLowerCase == d)
 
   /**
-   * Returns the public suffix from a domain.
+   * returns the public suffix from a domain.
    *
    * If the domain is already a public suffix, it will be returned unchanged as an option.
    * E.g. "www.example.net" will return "net".

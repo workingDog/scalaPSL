@@ -18,19 +18,18 @@ object Parser {
 }
 
 /**
- * The parser takes the Public Suffix List file as input and returns a {@link Rule} list.
+ * The parser takes the Public Suffix List file as input and returns a list of {@link Rule}.
  */
 class Parser {
 
   import Parser._
 
   /**
-   * Parses all rules from a stream.
+   * Parses all rules from a stream and returns the list of rules
    *
    * @param stream the stream with lines of rules
    * @param charset the character encoding of that stream
    *
-   * @return the list of rules
    */
 
   def parse(stream: InputStream, charset: Codec): List[Rule] = {
@@ -39,7 +38,7 @@ class Parser {
   }
 
   /**
-   * Parses a line for a rule.
+   * Parses a line for a rule and returns a rule or None if no rule was found
    *
    * @param line the line with one rule
    * @return the parsed { @code Rule}, or None if no rule was found

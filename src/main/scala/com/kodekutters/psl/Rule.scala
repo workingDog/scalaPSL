@@ -34,12 +34,13 @@ case class Rule(pattern: String, exceptionRule: Boolean) {
   private val matcher = new RuleMatcher(pattern)
 
   /**
-   * The exception token is not included in the pattern
+   * returns the rule pattern without the exception token "!"
    */
   def getPattern = matcher.getPattern
 
   /**
-   * The label count is used for determining the prevailing rule.
+   * The label count is the number of constituent labels of a rule pattern,
+   * it is used for determining the prevailing rule.
    */
   def getLabelCount = Util.splitLabels(matcher.getPattern).length
 

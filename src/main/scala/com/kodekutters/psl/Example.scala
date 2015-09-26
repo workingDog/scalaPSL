@@ -1,6 +1,8 @@
 package com.kodekutters.psl
 
-
+/**
+ * a simple example of using PublicSuffixList
+ */
 object Example {
 
   def main(args: Array[String]) {

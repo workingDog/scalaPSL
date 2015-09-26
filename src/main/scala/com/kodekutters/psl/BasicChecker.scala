@@ -3,8 +3,7 @@ package com.kodekutters.psl
 import java.net.IDN
 
 /**
- * a basic check of a domain name input
- * ref: https://github.com/wrangr/psl
+ * a basic set of checks of a domain name input
  */
 object BasicChecker {
 
@@ -18,7 +17,9 @@ object BasicChecker {
   val LABEL_INVALID_CHARS = "Domain name label can only contain alphanumeric characters or dashes."
 
   /**
-   * Note: checks is based on the lowercase of the input
+   * determine if the input string passes the basic tests.
+   * Note the characters check is based on the lowercase of the input.
+   * Will print a error message if a test fails.
    */
   def isValid(input: String): Boolean = {
     if (input == null) false

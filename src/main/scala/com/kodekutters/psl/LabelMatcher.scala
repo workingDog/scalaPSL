@@ -1,12 +1,15 @@
 package com.kodekutters.psl
 
-/**
- * The label matcher. The matcher is case insensitive.
- */
+
 object LabelMatcher {
   def apply(pattern: String) = new LabelMatcher(pattern)
 }
 
+/**
+ * The label matcher. The matcher is case insensitive.
+ *
+ * @param pattern the rule pattern
+ */
 class LabelMatcher(val pattern: String) {
 
   /**

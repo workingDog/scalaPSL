@@ -4,7 +4,9 @@ package com.kodekutters.psl
  * test of the PublicSuffixList
  *
  * references:
+ *
  *    https://publicsuffix.org/list/
+ *
  *    https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt
  */
 object TestApp {

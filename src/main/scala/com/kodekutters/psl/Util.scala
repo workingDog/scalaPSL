@@ -1,7 +1,7 @@
 package com.kodekutters.psl
 
 /**
- * utility support object
+ * supporting utilities
  */
 
 object Util {
