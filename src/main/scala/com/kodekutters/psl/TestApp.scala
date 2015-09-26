@@ -25,8 +25,10 @@ object TestApp {
     println("www.example.net isRegistrable should be false ---> " + psl.isRegistrable("www.example.net"))
     println("example.net getRegistrableDomain should be Some(example.net) ---> " + psl.getRegistrableDomain("example.net"))
     println("www.example.net getRegistrableDomain should be Some(example.net) ---> " + psl.getRegistrableDomain("www.example.net"))
-    println("example.co.uk getRegistrableDomain should be Some(co.uk) ---> " + psl.getRegistrableDomain("example.co.uk"))
-    println("www.example.co.uk getRegistrableDomain should be Some(co.uk) ---> " + psl.getRegistrableDomain("www.example.co.uk"))
+    println("example.co.uk getRegistrableDomain should be Some(example.co.uk) ---> " + psl.getRegistrableDomain("example.co.uk"))
+    println("www.example.co.uk getRegistrableDomain should be Some(example.co.uk) ---> " + psl.getRegistrableDomain("www.example.co.uk"))
+    println("食狮.com.cn getRegistrableDomain should be Some(食狮.com.cn) ---> " + psl.getRegistrableDomain("食狮.com.cn"))
+    println("xn--85x722f.com.cn getRegistrableDomain should be Some(xn--85x722f.com.cn) ---> " + psl.getRegistrableDomain("xn--85x722f.com.cn"))
     println()
   }
 

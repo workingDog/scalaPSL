@@ -1,9 +1,7 @@
 package com.kodekutters.psl
 
 import java.net.URL
-
 import com.typesafe.config.{ConfigFactory, Config}
-
 import scala.io.Codec
 
 
@@ -53,7 +51,7 @@ object PublicSuffixList {
       val charset = Codec(properties.getString(PROPERTY_CHARSET))
       // parse the rules file into a list of rules and add the default rule to it
       val rules = Parser().parse(listStream, charset) :+ Rule.DEFAULT_RULE
-      val index = new ListIndex(rules) // new TreeSetIndex(rules)
+      val index = new ListIndex(rules)
       new PublicSuffixList(index, url, charset)
     } catch {
       case e: Exception => println("exception caught: " + e); null
@@ -87,8 +85,7 @@ final class PublicSuffixList(val index: Index, val url: URL, val charset: Codec)
    * @return the registrable domain, None if the domain is not registrable
    */
   def getRegistrableDomain(domain: String): Option[String] = {
-    if (domain == null || domain.isEmpty() || domain.charAt(0) == '.' || !BasicChecker.isValid(domain)) None
-    else {
+    if (isValidInput(domain)) {
       val punycode = new PunycodeAutoDecoder()
       val decodedDomain = punycode.decode(domain)
       doGetPublicSuffix(decodedDomain) match {
@@ -104,6 +101,8 @@ final class PublicSuffixList(val index: Index, val url: URL, val charset: Codec)
           }
       }
     }
+    else
+      None
   }
 
   /**
@@ -126,10 +125,10 @@ final class PublicSuffixList(val index: Index, val url: URL, val charset: Codec)
    * @return the public suffix, None if none matched
    */
   def getPublicSuffix(domain: String): Option[String] = {
-    if (domain == null || domain.isEmpty || !BasicChecker.isValid(domain))
-      None
-    else
+    if (isValidInput(domain))
       doGetPublicSuffix(domain)
+    else
+      None
   }
 
   private def doGetPublicSuffix(domain: String): Option[String] = {
@@ -148,11 +147,13 @@ final class PublicSuffixList(val index: Index, val url: URL, val charset: Codec)
    * @return { @code true} if the domain is a public suffix
    */
   def isPublicSuffix(domain: String): Boolean = {
-    if (domain == null || domain.isEmpty || !BasicChecker.isValid(domain))
-      false
-    else
+    if (isValidInput(domain))
       doGetPublicSuffix(domain).exists(d => domain.toLowerCase == d)
+    else
+      false
   }
+
+  private def isValidInput(domain: String): Boolean = !(domain == null || domain.isEmpty() || domain.charAt(0) == '.' || !BasicChecker.isValid(domain))
 
   /**
    * for testing, see TestApp
