@@ -1,4 +1,4 @@
-# Public Suffix List
+# Public Suffix List Scala API
 
 From reference 1 [Public Suffix List](https://publicsuffix.org/):
 
@@ -34,12 +34,11 @@ The Public Suffix List is a list of simple rules for all known public suffixes, 
 
 ## How to use
 
-Very simple, see the Example.scala and TestApp.scala
+Very simple to use, see the Example.scala and TestApp.scala
 
 ## Dependencies
 
-Uses scala 2.11.7
-Uses TypeSafe [Configuration library for JVM languages] (https://github.com/typesafehub/config)
+Uses scala 2.11.7 and TypeSafe [Configuration library for JVM languages] (https://github.com/typesafehub/config)
 Also you MUST download the latest "Public Suffix List" from reference 1, and put it in the data directory.
 
 ## Status
