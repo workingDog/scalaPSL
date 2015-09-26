@@ -14,6 +14,7 @@ object TestApp {
   def main(args: Array[String]) {
     test1()
     test2()
+    test3()
   }
 
   def test1(): Unit = {
@@ -134,5 +135,12 @@ object TestApp {
     psl.checkPublicSuffix("xn--fiqs8s", null)
     println()
   }
+
+  def test3() = {
+    println("......test3......")
+    val psl = PublicSuffixList()
+    println("net@ubx getRegistrableDomain should return None and print an error message if psl.printChecks=true ---> "+ psl.getRegistrableDomain("net@ubx"))
+  }
+
 
 }

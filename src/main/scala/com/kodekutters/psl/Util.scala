@@ -22,4 +22,17 @@ object Util {
    */
   def joinLabels(labels: List[String]): String = labels.mkString(".")
 
+  /**
+   * Matches a string label. Empty labels or null never match. Matching is case insensitive.
+   *
+   * @param pattern the rule pattern
+   * @param label the label
+   * @return true if the label matches the pattern
+   */
+  def isLabelMatch(pattern: String, label: String): Boolean = {
+      if (label == null || label.isEmpty) false
+      else if (pattern == Rule.WILDCARD) true
+      else pattern.equalsIgnoreCase(label)
+  }
+
 }

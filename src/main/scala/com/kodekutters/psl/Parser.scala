@@ -31,7 +31,6 @@ class Parser {
    * @param charset the character encoding of that stream
    *
    */
-
   def parse(stream: InputStream, charset: Codec): List[Rule] = {
     val theList = (for (line <- Source.fromInputStream(stream, charset.name).getLines()) yield parseLine(line)).toList
     theList.flatten

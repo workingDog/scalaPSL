@@ -19,7 +19,10 @@ object PublicSuffixList {
    * The file name with the Public Suffix List rules.
    */
   val PROPERTY_LIST_FILE = "psl.file"
-
+  /**
+   * if true print the basic input checks error messages, else suppress the printing, see BasicChecker
+   */
+  val PRINT_CHECKS = "psl.printChecks"
   /**
    * loads the default properties from the application.conf file in the resource directory.
    */
@@ -37,10 +40,11 @@ object PublicSuffixList {
       val listStream = getClass.getResourceAsStream(properties.getString(PROPERTY_LIST_FILE))
       val url = new URL(properties.getString(PROPERTY_URL))
       val charset = Codec(properties.getString(PROPERTY_CHARSET))
+      val pChecks = properties.getBoolean(PRINT_CHECKS)
       // parse the rules file into a list of rules and add the default rule to it
       val rules = Parser().parse(listStream, charset) :+ Rule.DEFAULT_RULE
-      val index = new ListIndex(rules)
-      new PublicSuffixList(index, url, charset)
+      val index = new RuleIndex(rules)
+      new PublicSuffixList(index, url, charset, pChecks)
     } catch {
       case e: Exception => println("exception caught: " + e); null
     }
@@ -72,7 +76,7 @@ object PublicSuffixList {
  * @param charset  the character encoding of the list
  *
  */
-final class PublicSuffixList(val index: Index, val url: URL, val charset: Codec) {
+final class PublicSuffixList(val index: RuleIndex, val url: URL, val charset: Codec, val pChecks: Boolean) {
 
   /**
    * gets the registrable domain.
@@ -112,7 +116,7 @@ final class PublicSuffixList(val index: Index, val url: URL, val charset: Codec)
    * @param domain the domain name
    * @return { @code true} if the domain is registrable
    */
-  def isRegistrable(domain: String): Boolean = getRegistrableDomain(domain).exists(d => domain.toLowerCase == d)
+  def isRegistrable(domain: String): Boolean = getRegistrableDomain(domain).contains(domain.toLowerCase)
 
   /**
    * returns the public suffix from a domain.
@@ -147,12 +151,12 @@ final class PublicSuffixList(val index: Index, val url: URL, val charset: Codec)
    */
   def isPublicSuffix(domain: String): Boolean = {
     if (isValidInput(domain))
-      doGetPublicSuffix(domain).exists(d => domain.toLowerCase == d)
+      doGetPublicSuffix(domain).contains(domain.toLowerCase)
     else
       false
   }
 
-  private def isValidInput(domain: String): Boolean = !(domain == null || domain.isEmpty() || domain.charAt(0) == '.' || !BasicChecker.isValid(domain))
+  private def isValidInput(domain: String): Boolean = !(domain == null || domain.isEmpty || domain.charAt(0) == '.' || !BasicChecker.isValid(domain, pChecks))
 
   /**
    * for testing, see TestApp

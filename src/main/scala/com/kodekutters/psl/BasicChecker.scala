@@ -21,23 +21,23 @@ object BasicChecker {
    * Note the characters check is based on the lowercase of the input.
    * Will print a error message if a test fails.
    */
-  def isValid(input: String): Boolean = {
+  def isValid(input: String, printChecks: Boolean): Boolean = {
     if (input == null) false
     else {
       var check = false
       val ascii = IDN.toASCII(input)
       ascii match {
-        case str if str.length < 1 => println(DOMAIN_TOO_SHORT + " input: " + input)
-        case str if str.length > 255 => println(DOMAIN_TOO_LONG + " input: " + input)
+        case str if str.length < 1 => if (printChecks) println(DOMAIN_TOO_SHORT + " input: " + input)
+        case str if str.length > 255 => if (printChecks) println(DOMAIN_TOO_LONG + " input: " + input)
         case _ => check = true
       }
       for (label <- Util.splitLabels(ascii)) {
         label match {
-          case lbl if lbl.length < 1 => println(LABEL_TOO_SHORT + " input: " + input)
-          case lbl if lbl.length > 63 => println(LABEL_TOO_LONG + " input: " + input)
-          case lbl if lbl.charAt(0) == '-' => println(LABEL_STARTS_WITH_DASH + " input: " + input)
-          case lbl if lbl.charAt(lbl.length - 1) == '-' => println(LABEL_ENDS_WITH_DASH + " input: " + input)
-          case lbl if ! """^[a-z0-9\-]+$""".r.pattern.matcher(lbl.toLowerCase).matches => println(LABEL_INVALID_CHARS + " input: " + input)
+          case lbl if lbl.length < 1 => if (printChecks) println(LABEL_TOO_SHORT + " input: " + input)
+          case lbl if lbl.length > 63 => if (printChecks) println(LABEL_TOO_LONG + " input: " + input)
+          case lbl if lbl.charAt(0) == '-' => if (printChecks) println(LABEL_STARTS_WITH_DASH + " input: " + input)
+          case lbl if lbl.charAt(lbl.length - 1) == '-' => if (printChecks) println(LABEL_ENDS_WITH_DASH + " input: " + input)
+          case lbl if ! """^[a-z0-9\-]+$""".r.pattern.matcher(lbl.toLowerCase).matches => if (printChecks) println(LABEL_INVALID_CHARS + " input: " + input)
           case _ => check = check && true
         }
       }

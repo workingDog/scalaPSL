@@ -5,7 +5,7 @@ import scala.collection.immutable.TreeSet
 /**
  * TreeSet based Rule index. Not used
  */
-final class TreeSetIndex(val rules: List[Rule]) extends Index {
+final class TreeSetIndex(val rules: List[Rule]) {
 
   private val treeSet = new TreeSet()(RuleComparator) ++ rules
 
