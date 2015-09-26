@@ -3,7 +3,7 @@ package com.kodekutters.psl
 import scala.collection.immutable.TreeSet
 
 /**
- * TreeSet based Rule index.
+ * TreeSet based Rule index. Not used
  */
 final class TreeSetIndex(val rules: List[Rule]) extends Index {
 

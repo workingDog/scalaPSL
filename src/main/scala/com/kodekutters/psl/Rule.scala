@@ -22,8 +22,8 @@ object Rule {
 /**
  * A Public Suffix rule.
  *
- * @param pattern the rule matching pattern
- * @param exceptionRule is an exception rule or not
+ * @param pattern  the rule matching pattern
+ * @param exceptionRule  is an exception rule or not
  */
 case class Rule(pattern: String, exceptionRule: Boolean) {
 

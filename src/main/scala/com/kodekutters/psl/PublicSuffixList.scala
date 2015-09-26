@@ -60,8 +60,11 @@ object PublicSuffixList {
  * The methods will return the results in the same type as the input.
  *
  * references:
+ *
  * https://publicsuffix.org/
+ *
  * https://github.com/whois-server-list/public-suffix-list <-- the main java code source
+ *
  * https://github.com/wrangr/psl
  *
  * @param index    the rule index
