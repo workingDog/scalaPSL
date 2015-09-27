@@ -132,8 +132,7 @@ final class PublicSuffixList(val ruleFinder: RuleFinder, val url: URL, val chars
   private def doGetPublicSuffix(domain: String): Option[String] = {
     val punycode = new PunycodeAutoDecoder()
     val decodedDomain = punycode.recode(domain)
-    ruleFinder.findRule(decodedDomain).flatMap(rule =>
-      rule.doMatch(decodedDomain).map(dmain => punycode.decode(dmain)))
+    ruleFinder.findRule(decodedDomain).flatMap(rule => rule.doMatch(decodedDomain).map(dmain => punycode.decode(dmain)))
   }
 
   /**
