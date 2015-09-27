@@ -9,8 +9,8 @@ object Util {
   /**
    * Splits a domain or pattern into its labels. Splitting is done at "."
    *
-   * @param domain the domain name or rule pattern, null returns null
-   * @return the domain or rule label
+   * @param domain the domain name or rule pattern
+   * @return the domain or rule label, null returns null
    */
   def splitLabels(domain: String): Array[String] = domain.split('.')
 
@@ -23,14 +23,15 @@ object Util {
   def joinLabels(labels: List[String]): String = labels.mkString(".")
 
   /**
-   * Matches a string label. Empty labels or null never match. Matching is case insensitive.
+   * Matches a string pattern with a string label.
+   * Empty strings or null never match. Matching is case insensitive.
    *
    * @param pattern the rule pattern
    * @param label the label
    * @return true if the label matches the pattern
    */
   def isLabelMatch(pattern: String, label: String): Boolean = {
-      if (label == null || label.isEmpty) false
+      if (pattern == null || pattern.isEmpty || label == null || label.isEmpty) false
       else if (pattern == Rule.WILDCARD) true
       else pattern.equalsIgnoreCase(label)
   }
