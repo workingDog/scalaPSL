@@ -11,7 +11,7 @@ import java.net.IDN
  */
 final class PunycodeAutoDecoder() {
   /**
-   * the state of {@code PunycodeAutoDecoder#decode(String)}.
+   * the decode state
    */
   private var decoded = false
 
@@ -19,8 +19,8 @@ final class PunycodeAutoDecoder() {
    * Decodes a domain name into UTF-8 if it was originally in Punycode ASCII.
    *
    * If the domain name is already UTF-8 no change occurs.
-   * The original format (Punycode or UTF-8) is saved in {@link #decoded}.
-   * {@link #recode(String)} can return the string in the saved format.
+   * The original format (Punycode or UTF-8) is saved in decoded.
+   * recode can return the string in the saved format.
    *
    * @param domain the domain name
    * @return the UTF-8 domain name
@@ -34,7 +34,7 @@ final class PunycodeAutoDecoder() {
   /**
    * Returns the UTF-8 domain name in the original format.
    *
-   * The original format is Punycode ASCII or UTF-8. The format is determined in {@link #decode(String)}.
+   * The original format is Punycode ASCII or UTF-8. The format is determined in decode.
    *
    * @param domain the UTF-8 domain name
    * @return the domain name in the original format
@@ -43,9 +43,9 @@ final class PunycodeAutoDecoder() {
 
   /**
    * determines if the original format was Punnycode ASCII.
-   * The original format is set in {@link #decode(String)}.
+   * The original format is set in decode.
    *
-   * @return { @code true} if the original format was Punnycode ASCII
+   * @return true if the original format was Punnycode ASCII
    */
   def isConverted: Boolean = decoded
 
