@@ -1,9 +1,7 @@
 package com.kodekutters.psl
 
 /**
- * The rule matcher.
- *
- * The matcher is case insensitive.
+ * The rule matcher. The matcher is case insensitive.
  */
 class RuleMatcher(labels: Array[String]) {
 
@@ -15,9 +13,7 @@ class RuleMatcher(labels: Array[String]) {
   private val reversedLabels = labels.reverse
 
   /**
-   * Returns the matched public suffix.
-   *
-   * Matching is case insensitive.
+   * Returns the matched public suffix. Matching is case insensitive.
    *
    * @param domain the domain name
    */

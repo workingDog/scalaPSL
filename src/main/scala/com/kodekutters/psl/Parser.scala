@@ -25,9 +25,9 @@ class Parser {
   import Parser._
 
   /**
-   * Parses all rules from a stream and returns the list of rules
+   * Parse all rules from a stream and return the list of rules
    *
-   * @param stream the stream with lines of rules
+   * @param stream the input stream of the file with lines of rules
    * @param charset the character encoding of that stream
    *
    */
@@ -37,7 +37,7 @@ class Parser {
   }
 
   /**
-   * Parses a line for a rule and returns a rule or None if no rule was found
+   * Parse a line for a rule and return a rule or None if no rule was found
    *
    * @param line the line with one rule
    * @return the parsed { @code Rule}, or None if no rule was found

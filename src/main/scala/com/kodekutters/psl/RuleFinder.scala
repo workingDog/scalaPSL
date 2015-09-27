@@ -3,9 +3,12 @@ package com.kodekutters.psl
 import scala.util.Sorting
 
 /**
- * A List based Rule index.
+ * A List based Rule finder.
  */
-final class RuleIndex(val rules: List[Rule]) {
+final class RuleFinder(val rules: List[Rule]) {
+
+  // testing TreeSet
+  //  private val treeSet = new TreeSet()(RuleComparator) ++ rules
 
   /**
    * Finds a list of matching rules.
@@ -29,4 +32,5 @@ final class RuleIndex(val rules: List[Rule]) {
       case list => Option(list.last)
     }
   }
+
 }

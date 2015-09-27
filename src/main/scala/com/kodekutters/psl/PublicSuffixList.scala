@@ -8,7 +8,7 @@ import scala.io.Codec
 object PublicSuffixList {
 
   /**
-   * URL of the Public Suffix List. ---> not yet used
+   * URL of the Public Suffix List. ---> for future use
    */
   val PROPERTY_URL = "psl.url"
   /**
@@ -40,11 +40,11 @@ object PublicSuffixList {
       val listStream = getClass.getResourceAsStream(properties.getString(PROPERTY_LIST_FILE))
       val url = new URL(properties.getString(PROPERTY_URL))
       val charset = Codec(properties.getString(PROPERTY_CHARSET))
-      val pChecks = properties.getBoolean(PRINT_CHECKS)
+      val printFlag = properties.getBoolean(PRINT_CHECKS)
       // parse the rules file into a list of rules and add the default rule to it
       val rules = Parser().parse(listStream, charset) :+ Rule.DEFAULT_RULE
-      val index = new RuleIndex(rules)
-      new PublicSuffixList(index, url, charset, pChecks)
+      val ruleFinder = new RuleFinder(rules)
+      new PublicSuffixList(ruleFinder, url, charset, printFlag)
     } catch {
       case e: Exception => println("exception caught: " + e); null
     }
@@ -71,12 +71,12 @@ object PublicSuffixList {
  *
  * https://github.com/wrangr/psl
  *
- * @param index    the rule index
+ * @param ruleFinder    the rule finder
  * @param url      the Public Suffix List url
  * @param charset  the character encoding of the list
  *
  */
-final class PublicSuffixList(val index: RuleIndex, val url: URL, val charset: Codec, val pChecks: Boolean) {
+final class PublicSuffixList(val ruleFinder: RuleFinder, val url: URL, val charset: Codec, val printFlag: Boolean) {
 
   /**
    * gets the registrable domain.
@@ -127,17 +127,12 @@ final class PublicSuffixList(val index: RuleIndex, val url: URL, val charset: Co
    * @param domain the domain name
    * @return the public suffix, None if none matched
    */
-  def getPublicSuffix(domain: String): Option[String] = {
-    if (isValidInput(domain))
-      doGetPublicSuffix(domain)
-    else
-      None
-  }
+  def getPublicSuffix(domain: String): Option[String] = if (isValidInput(domain)) doGetPublicSuffix(domain) else None
 
   private def doGetPublicSuffix(domain: String): Option[String] = {
     val punycode = new PunycodeAutoDecoder()
     val decodedDomain = punycode.recode(domain)
-    index.findRule(decodedDomain).flatMap(rule =>
+    ruleFinder.findRule(decodedDomain).flatMap(rule =>
       rule.doMatch(decodedDomain).map(dmain => punycode.decode(dmain)))
   }
 
@@ -149,14 +144,9 @@ final class PublicSuffixList(val index: RuleIndex, val url: URL, val charset: Co
    * @param domain the domain name
    * @return { @code true} if the domain is a public suffix
    */
-  def isPublicSuffix(domain: String): Boolean = {
-    if (isValidInput(domain))
-      doGetPublicSuffix(domain).contains(domain.toLowerCase)
-    else
-      false
-  }
+  def isPublicSuffix(domain: String): Boolean = if (isValidInput(domain)) doGetPublicSuffix(domain).contains(domain.toLowerCase) else false
 
-  private def isValidInput(domain: String): Boolean = !(domain == null || domain.isEmpty || domain.charAt(0) == '.' || !BasicChecker.isValid(domain, pChecks))
+  private def isValidInput(domain: String): Boolean = !(domain == null || domain.isEmpty || domain.charAt(0) == '.' || !BasicChecker.isValid(domain, printFlag))
 
   /**
    * for testing, see TestApp
