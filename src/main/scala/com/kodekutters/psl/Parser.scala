@@ -2,7 +2,7 @@ package com.kodekutters.psl
 
 import java.io.InputStream
 
-import scala.io.{Codec, Source}
+import scala.io.{BufferedSource, Codec, Source}
 
 
 /**
@@ -25,14 +25,14 @@ class Parser {
   import Parser._
 
   /**
-   * Parse all rules from a stream and return the list of rules
+   * Parse all rules from the source and return the list of rules
    *
-   * @param stream the input stream of the file with lines of rules
+   * @param source the BufferedSource of the file with lines of rules
    * @param charset the character encoding of that stream
    *
    */
-  def parse(stream: InputStream, charset: Codec): List[Rule] = {
-    val theList = (for (line <- Source.fromInputStream(stream, charset.name).getLines()) yield parseLine(line)).toList
+  def parse(source: BufferedSource, charset: Codec): List[Rule] = {
+    val theList = (for (line <- source.getLines()) yield parseLine(line)).toList
     theList.flatten
   }
 

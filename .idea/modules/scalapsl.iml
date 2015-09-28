@@ -78,5 +78,6 @@
     <orderEntry type="library" scope="PROVIDED" name="SBT: org.spire-math:jawn-parser_2.10:0.6.0:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="SBT: org.spire-math:json4s-support_2.10:0.6.0:jar" level="project" />
     <orderEntry type="library" name="scala-sdk-2.11.7" level="project" />
+    <orderEntry type="library" name="scala-sdk-2.11.71" level="project" />
   </component>
 </module>

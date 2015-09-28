@@ -2,13 +2,18 @@ package com.kodekutters.psl
 
 import java.net.URL
 import com.typesafe.config.{ConfigFactory, Config}
-import scala.io.Codec
+import scala.io.{Codec, Source}
 
 
 object PublicSuffixList {
 
   /**
-   * URL of the Public Suffix List. ---> for future use
+   * URL of the Public Suffix List (PSL). for example:
+   *
+   * "https://publicsuffix.org/list/public_suffix_list.dat" or
+   *
+   * "file:///Users/.../src/main/resources/public_suffix_list.dat"
+   *
    */
   val PROPERTY_URL = "psl.url"
   /**
@@ -16,13 +21,10 @@ object PublicSuffixList {
    */
   val PROPERTY_CHARSET = "psl.charset"
   /**
-   * The file name with the Public Suffix List rules.
-   */
-  val PROPERTY_LIST_FILE = "psl.file"
-  /**
    * if true print the basic input checks error messages, else suppress the printing, see BasicChecker
    */
   val PRINT_CHECKS = "psl.printChecks"
+
   /**
    * loads the default properties from the application.conf file in the resource directory.
    */
@@ -31,20 +33,21 @@ object PublicSuffixList {
   /**
    * create a PublicSuffixList with custom properties.
    *
-   * @param properties the configuration properties for building the { @link PublicSuffixList}.
+   * @param properties the configuration properties for building the link PublicSuffixList.
    * @return a public suffix list created with the given properties
    *
    */
   def apply(properties: Config): PublicSuffixList = {
     try {
-      val listStream = getClass.getResourceAsStream(properties.getString(PROPERTY_LIST_FILE))
-      val url = new URL(properties.getString(PROPERTY_URL))
-      val charset = Codec(properties.getString(PROPERTY_CHARSET))
       val printFlag = properties.getBoolean(PRINT_CHECKS)
+      // default codec is "UTF-8"
+      val charset = if (properties.getString(PROPERTY_CHARSET).isEmpty) Codec("UTF-8") else Codec(properties.getString(PROPERTY_CHARSET))
+      // the PSL file from the url
+      var sourceBuffer = Source.fromURL(new URL(properties.getString(PROPERTY_URL)))
       // parse the rules file into a list of rules and add the default rule to it
-      val rules = Parser().parse(listStream, charset) :+ Rule.DEFAULT_RULE
+      val rules = Parser().parse(sourceBuffer, charset) :+ Rule.DEFAULT_RULE
       val ruleFinder = new RuleFinder(rules)
-      new PublicSuffixList(ruleFinder, url, charset, printFlag)
+      new PublicSuffixList(ruleFinder, charset, printFlag)
     } catch {
       case e: Exception => println("exception caught: " + e); null
     }
@@ -72,11 +75,10 @@ object PublicSuffixList {
  * https://github.com/wrangr/psl
  *
  * @param ruleFinder    the rule finder
- * @param url      the Public Suffix List url
  * @param charset  the character encoding of the list
  *
  */
-final class PublicSuffixList(val ruleFinder: RuleFinder, val url: URL, val charset: Codec, val printFlag: Boolean) {
+final class PublicSuffixList(val ruleFinder: RuleFinder, val charset: Codec, val printFlag: Boolean) {
 
   /**
    * gets the registrable domain.
@@ -153,7 +155,7 @@ final class PublicSuffixList(val ruleFinder: RuleFinder, val url: URL, val chars
   def checkPublicSuffix(domain: String, expected: String): Unit = {
     getRegistrableDomain(domain) match {
       case None => println(Option(expected).isEmpty + "  domain: " + domain + " expected: " + expected)
-      case Some(mtch) => println((mtch.toLowerCase == expected)+ "  domain: " + domain + " expected: " + expected)
+      case Some(mtch) => println((mtch.toLowerCase == expected) + "  domain: " + domain + " expected: " + expected)
     }
   }
 

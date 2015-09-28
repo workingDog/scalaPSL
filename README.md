@@ -34,12 +34,21 @@ The Public Suffix List is a list of simple rules for all known public suffixes, 
 
 ## How to use
 
-Very simple to use, see the Example.scala and TestApp.scala
+Very simple to use, see the Example.scala and TestApp.scala.
+
+To read the PSL directly from reference 1, you need to be connected to the internet and 
+have the following property set in the configuration (typically application.conf):
+ 
+    psl.url="https://publicsuffix.org/list/public_suffix_list.dat"
+
+If you do not want to read the list from the internet, use something like:
+
+    psl.url="file:///Users/.../scalaPSL/src/main/resources/public_suffix_list.dat"
 
 ## Dependencies
 
 Uses scala 2.11.7 and TypeSafe [Configuration library for JVM languages] (https://github.com/typesafehub/config). 
-Also you MUST download the latest "Public Suffix List" from reference 1, and put it in the data directory.
+The latest "Public Suffix List" can be obtained from reference 1. 
 
 ## Status
 
