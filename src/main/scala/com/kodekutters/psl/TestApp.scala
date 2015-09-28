@@ -1,29 +1,30 @@
 package com.kodekutters.psl
 
+
 /**
  * test of the PublicSuffixList
  *
  * references:
  *
- *    https://publicsuffix.org/list/
+ * https://publicsuffix.org/list/
  *
- *    https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt
+ * https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt
  */
 object TestApp {
 
   def main(args: Array[String]) {
-    test1()
-    test2()
-    test3()
+    val psl = PublicSuffixList()
+    test1(psl)
+    test2(psl)
+    test3(psl)
   }
 
-  def test1(): Unit = {
+  def test1(psl: PublicSuffixList): Unit = {
     println("......test1......")
-    val psl = PublicSuffixList()
-    println("net isPublicSuffix should be true ---> "+ psl.isPublicSuffix("net"))
+    println("net isPublicSuffix should be true ---> " + psl.isPublicSuffix("net"))
     println("net isRegistrable should be false ---> " + psl.isRegistrable("net"))
     println("net getRegistrableDomain should be None ---> " + psl.getRegistrableDomain("net"))
-    println("example.net isPublicSuffix should be false ---> "+ psl.isPublicSuffix("example.net"))
+    println("example.net isPublicSuffix should be false ---> " + psl.isPublicSuffix("example.net"))
     println("example.net isRegistrable should be true ---> " + psl.isRegistrable("example.net"))
     println("www.example.net isRegistrable should be false ---> " + psl.isRegistrable("www.example.net"))
     println("example.net getRegistrableDomain should be Some(example.net) ---> " + psl.getRegistrableDomain("example.net"))
@@ -35,9 +36,8 @@ object TestApp {
     println()
   }
 
-  def test2(): Unit = {
+  def test2(psl: PublicSuffixList): Unit = {
     println("......test2......")
-    val psl = PublicSuffixList()
     // null input.
     psl.checkPublicSuffix(null, null)
     // Mixed case.
@@ -136,10 +136,9 @@ object TestApp {
     println()
   }
 
-  def test3() = {
+  def test3(psl: PublicSuffixList) = {
     println("......test3......")
-    val psl = PublicSuffixList()
-    println("net@ubx getRegistrableDomain should return None and print an error message if psl.printChecks=true ---> "+ psl.getRegistrableDomain("net@ubx"))
+    println("net@ubx getRegistrableDomain should return None and print an error message if psl.printChecks=true ---> " + psl.getRegistrableDomain("net@ubx"))
   }
 
 

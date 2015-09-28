@@ -11,7 +11,6 @@ object PublicSuffixList {
    * URL of the Public Suffix List (PSL). for example:
    *
    * "https://publicsuffix.org/list/public_suffix_list.dat" or
-   *
    * "file:///Users/.../src/main/resources/public_suffix_list.dat"
    *
    */
@@ -26,7 +25,7 @@ object PublicSuffixList {
   val PRINT_CHECKS = "psl.printChecks"
 
   /**
-   * loads the default properties from the application.conf file in the resource directory.
+   * loads the default properties from the application.conf file in the resources directory.
    */
   def getDefaults: Config = ConfigFactory.load()
 

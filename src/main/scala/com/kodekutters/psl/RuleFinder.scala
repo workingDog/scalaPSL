@@ -7,9 +7,6 @@ import scala.util.Sorting
  */
 final class RuleFinder(val rules: List[Rule]) {
 
-  // testing TreeSet
-  //  private val treeSet = new TreeSet()(RuleComparator) ++ rules
-
   /**
    * Finds a list of matching rules.
    * This list may not include all matching rules, but includes the prevailing rule.
@@ -26,7 +23,7 @@ final class RuleFinder(val rules: List[Rule]) {
    */
   def findRule(domain: String): Option[Rule] = {
     val theMatchedRules = findRules(domain).toArray
-    Sorting.quickSort(theMatchedRules)(RuleComparator)
+    Sorting.quickSort(theMatchedRules)
     theMatchedRules match {
       case list if list.isEmpty => None
       case list => Option(list.last)
