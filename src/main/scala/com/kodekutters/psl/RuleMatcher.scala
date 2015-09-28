@@ -25,7 +25,7 @@ class RuleMatcher(labels: Array[String]) {
       else {
         val reversedMatchedLabels = new Array[String](reversedLabels.length)
         var matchOk = true
-          for (i <- 0 until reversedLabels.length) {
+        for (i <- reversedLabels.indices) {
             if (i < reversedDomainLabels.length && Util.isLabelMatch(reversedLabels(i), reversedDomainLabels(i)))
               reversedMatchedLabels(i) = reversedDomainLabels(i)
             else
