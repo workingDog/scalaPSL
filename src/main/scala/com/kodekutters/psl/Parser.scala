@@ -1,8 +1,7 @@
 package com.kodekutters.psl
 
-import java.io.InputStream
-
-import scala.io.{BufferedSource, Codec, Source}
+import scala.collection.parallel.immutable.ParSeq
+import scala.io.{BufferedSource, Codec}
 
 
 /**
@@ -31,9 +30,9 @@ class Parser {
    * @param charset the character encoding of that stream
    *
    */
-  def parse(source: BufferedSource, charset: Codec): List[Rule] = {
-    val theList = (for (line <- source.getLines()) yield parseLine(line)).toList
-    theList.flatten
+  def parse(source: BufferedSource, charset: Codec): ParSeq[Rule] = {
+    val theList = for (line <- source.getLines()) yield parseLine(line)
+    theList.flatten.toList.par
   }
 
   /**
