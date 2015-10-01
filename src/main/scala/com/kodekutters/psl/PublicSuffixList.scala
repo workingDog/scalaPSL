@@ -45,8 +45,8 @@ object PublicSuffixList {
       var sourceBuffer = Source.fromURL(new URL(properties.getString(PROPERTY_URL))) // implicit codec charset
       // parse the rules file into a list of rules and add the default rule to it
       val rules = Parser().parse(sourceBuffer) :+ Rule.DEFAULT_RULE
-      val ruleFinder = new RuleFinder(rules)
-      new PublicSuffixList(ruleFinder, printFlag)
+      val ruleList = new RuleList(rules)
+      new PublicSuffixList(ruleList, printFlag)
     } catch {
       case e: Exception => println("exception caught: " + e); null
     }
@@ -74,7 +74,7 @@ object PublicSuffixList {
  *     https://github.com/wrangr/psl
  *
  */
-final class PublicSuffixList(val ruleFinder: RuleFinder, val printFlag: Boolean) {
+final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
 
   /**
    * returns the registrable par of a domain.
@@ -130,7 +130,7 @@ final class PublicSuffixList(val ruleFinder: RuleFinder, val printFlag: Boolean)
   private def doGetPublicSuffix(domain: String): Option[String] = {
     val punycode = new PunycodeAutoDecoder()
     val decodedDomain = punycode.recode(domain)
-    ruleFinder.findRule(decodedDomain).flatMap(rule => rule.doMatch(decodedDomain).map(dmain => punycode.decode(dmain)))
+    ruleList.findRule(decodedDomain).flatMap(rule => rule.doMatch(decodedDomain).map(dmain => punycode.decode(dmain)))
   }
 
   /**

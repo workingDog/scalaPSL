@@ -4,9 +4,9 @@ import scala.collection.parallel.immutable.ParSeq
 import scala.util.Sorting
 
 /**
- * A List based Rule finder.
+ * Holds the list of rules and provides for finding the prevailing rule.
  */
-final class RuleFinder(val rules: ParSeq[Rule]) {
+final class RuleList(val rules: ParSeq[Rule]) {
 
   /**
    * Finds a list of matching rules.

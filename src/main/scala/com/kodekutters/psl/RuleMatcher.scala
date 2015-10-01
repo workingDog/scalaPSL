@@ -13,7 +13,7 @@ class RuleMatcher(labels: Array[String]) {
   private val reversedLabels = labels.reverse
 
   /**
-   * Returns the matched public suffix. Matching is case insensitive.
+   * Returns the matched public suffix of the input domain name. Matching is case insensitive.
    *
    * @param domain the domain name
    */
