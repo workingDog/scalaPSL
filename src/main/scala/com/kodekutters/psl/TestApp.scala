@@ -13,10 +13,10 @@ package com.kodekutters.psl
 object TestApp {
 
   def main(args: Array[String]) {
-      val psl = PublicSuffixList()
-      test1(psl)
-      test2(psl)
-      test3(psl)
+    val psl = PublicSuffixList()
+    test1(psl)
+    test2(psl)
+    test3(psl)
   }
 
   def test1(psl: PublicSuffixList): Unit = {

@@ -20,7 +20,6 @@ final class PunycodeAutoDecoder() {
    *
    * If the domain name is already UTF-8 no change occurs.
    * The original format (Punycode or UTF-8) is saved in decoded.
-   * recode can return the string in the saved format.
    *
    * @param domain the domain name
    * @return the UTF-8 domain name

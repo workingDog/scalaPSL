@@ -1,7 +1,7 @@
 package com.kodekutters.psl
 
 import scala.collection.parallel.immutable.ParSeq
-import scala.io.{BufferedSource, Codec}
+import scala.io.BufferedSource
 
 
 /**
@@ -17,7 +17,7 @@ object Parser {
 }
 
 /**
- * The parser takes the Public Suffix List file as input and returns a list of {@link Rule}.
+ * The Public Suffix List source input is returned as a list of {@link Rule}.
  */
 class Parser {
 
@@ -26,20 +26,19 @@ class Parser {
   /**
    * Parse all rules from the source and return the list of rules
    *
-   * @param source the BufferedSource of the file with lines of rules
-   * @param charset the character encoding of that stream
+   * @param source contains the rules one to each line
    *
    */
-  def parse(source: BufferedSource, charset: Codec): ParSeq[Rule] = {
+  def parse(source: BufferedSource): ParSeq[Rule] = {
     val theList = for (line <- source.getLines()) yield parseLine(line)
     theList.flatten.toList.par
   }
 
   /**
-   * Parse a line for a rule and return a rule or None if no rule was found
+   * Parse a string and return a rule or None if no rule was found
    *
-   * @param line the line with one rule
-   * @return the parsed { @code Rule}, or None if no rule was found
+   * @param line the line string with one rule
+   * @return the parsed Rule or None if no rule was found
    */
   def parseLine(line: String): Option[Rule] = {
     if (line == null) None

@@ -40,13 +40,13 @@ object PublicSuffixList {
     try {
       val printFlag = properties.getBoolean(PRINT_CHECKS)
       // default codec is "UTF-8"
-      val charset = if (properties.getString(PROPERTY_CHARSET).isEmpty) Codec("UTF-8") else Codec(properties.getString(PROPERTY_CHARSET))
+      implicit val charset = if (properties.getString(PROPERTY_CHARSET).isEmpty) Codec("UTF-8") else Codec(properties.getString(PROPERTY_CHARSET))
       // the PSL file from the url
-      var sourceBuffer = Source.fromURL(new URL(properties.getString(PROPERTY_URL)))
+      var sourceBuffer = Source.fromURL(new URL(properties.getString(PROPERTY_URL))) // implicit codec charset
       // parse the rules file into a list of rules and add the default rule to it
-      val rules = Parser().parse(sourceBuffer, charset) :+ Rule.DEFAULT_RULE
+      val rules = Parser().parse(sourceBuffer) :+ Rule.DEFAULT_RULE
       val ruleFinder = new RuleFinder(rules)
-      new PublicSuffixList(ruleFinder, charset, printFlag)
+      new PublicSuffixList(ruleFinder, printFlag)
     } catch {
       case e: Exception => println("exception caught: " + e); null
     }
@@ -60,33 +60,30 @@ object PublicSuffixList {
 }
 
 /**
- * The Public Suffix List API.
+ * The Public Suffix List.
  *
- * Use the methods with UTF-8 domain names or Punycode encoded ASCII domain names.
- * The methods will return the results in the same type as the input.
+ * Use UTF-8 domain names or Punycode encoded ASCII domain names in the methods.
+ * The methods will return the results in the same type as their input.
  *
  * references:
  *
- * https://publicsuffix.org/
+ *     https://publicsuffix.org/
  *
- * https://github.com/whois-server-list/public-suffix-list <-- the main java code source
+ *     https://github.com/whois-server-list/public-suffix-list <-- the main java code source
  *
- * https://github.com/wrangr/psl
- *
- * @param ruleFinder    the rule finder
- * @param charset  the character encoding of the list
+ *     https://github.com/wrangr/psl
  *
  */
-final class PublicSuffixList(val ruleFinder: RuleFinder, val charset: Codec, val printFlag: Boolean) {
+final class PublicSuffixList(val ruleFinder: RuleFinder, val printFlag: Boolean) {
 
   /**
-   * gets the registrable domain.
+   * returns the registrable par of a domain.
    *
    * E.g. "www.example.net" and "example.net" will return "example.net".
-   * Null, and empty string or domains with a leading dot will return None.
+   * Null, and empty string or domains with a leading dot or invalid input will return None.
    *
    * @param domain the domain name
-   * @return the registrable domain, None if the domain is not registrable
+   * @return the registrable par of a domain, None if the domain is not registrable
    */
   def getRegistrableDomain(domain: String): Option[String] = {
     if (isValidInput(domain)) {
@@ -115,18 +112,18 @@ final class PublicSuffixList(val ruleFinder: RuleFinder, val charset: Codec, val
    * E.g. "example.net" is registrable, "www.example.net" and "net" are not.
    *
    * @param domain the domain name
-   * @return { @code true} if the domain is registrable
+   * @return true if the domain is registrable
    */
   def isRegistrable(domain: String): Boolean = getRegistrableDomain(domain).contains(domain.toLowerCase)
 
   /**
-   * returns the public suffix from a domain.
+   * returns the public suffix of a domain.
    *
-   * If the domain is already a public suffix, it will be returned unchanged as an option.
-   * E.g. "www.example.net" will return "net".
+   * If the domain is already a public suffix, it will be returned unchanged.
+   * e.g. "www.example.net" will return "net".
    *
    * @param domain the domain name
-   * @return the public suffix, None if none matched
+   * @return the public suffix of a domain, None if none found
    */
   def getPublicSuffix(domain: String): Option[String] = if (isValidInput(domain)) doGetPublicSuffix(domain) else None
 
@@ -139,10 +136,10 @@ final class PublicSuffixList(val ruleFinder: RuleFinder, val charset: Codec, val
   /**
    * determines if a domain is a public suffix or not.
    *
-   * Example: "com" is a public suffix, "example.com" is not.
+   * e.g. "com" is a public suffix, "example.com" is not.
    *
    * @param domain the domain name
-   * @return { @code true} if the domain is a public suffix
+   * @return true if the domain is a public suffix
    */
   def isPublicSuffix(domain: String): Boolean = if (isValidInput(domain)) doGetPublicSuffix(domain).contains(domain.toLowerCase) else false
 

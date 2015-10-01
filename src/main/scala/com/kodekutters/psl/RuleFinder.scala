@@ -15,7 +15,7 @@ final class RuleFinder(val rules: ParSeq[Rule]) {
   protected def findRules(domain: String): List[Rule] = rules.filter(_.doMatch(domain).isDefined).toList
 
   /**
-   * Finds the prevailing rule.
+   * Finds the prevailing rule from the list of rules.
    */
   def findRule(domain: String): Option[Rule] = {
     val theMatchedRules = findRules(domain).toArray
