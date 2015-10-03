@@ -4,7 +4,12 @@ import java.net.URL
 import com.typesafe.config.{ConfigFactory, Config}
 import scala.io.{Codec, Source}
 
-
+/**
+ * The Public Suffix List.
+ *
+ * Preferred way of creating a PublicSuffixList.
+ *
+ */
 object PublicSuffixList {
 
   /**
@@ -88,7 +93,7 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
   def getRegistrableDomain(domain: String): Option[String] = {
     if (isValidInput(domain)) {
       val punycode = new PunycodeAutoDecoder()
-      val decodedDomain = punycode.decode(domain)
+      val decodedDomain = punycode.decode(domain.toLowerCase)
       doGetPublicSuffix(decodedDomain) match {
         case None => None
         case Some(suffix) =>
@@ -129,7 +134,7 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
 
   private def doGetPublicSuffix(domain: String): Option[String] = {
     val punycode = new PunycodeAutoDecoder()
-    val decodedDomain = punycode.recode(domain)
+    val decodedDomain = punycode.recode(domain.toLowerCase)
     ruleList.findRule(decodedDomain).flatMap(rule => rule.doMatch(decodedDomain).map(dmain => punycode.decode(dmain)))
   }
 
@@ -151,7 +156,7 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
   def checkPublicSuffix(domain: String, expected: String): Unit = {
     getRegistrableDomain(domain) match {
       case None => println(Option(expected).isEmpty + "  domain: " + domain + " expected: " + expected)
-      case Some(mtch) => println((mtch.toLowerCase == expected) + "  domain: " + domain + " expected: " + expected)
+      case Some(regDomain) => println((regDomain == expected) + "  domain: " + domain + " expected: " + expected)
     }
   }
 

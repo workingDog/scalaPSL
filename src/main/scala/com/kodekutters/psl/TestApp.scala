@@ -136,6 +136,7 @@ object TestApp {
     println()
   }
 
+  // bad characters tests
   def test3(psl: PublicSuffixList) = {
     println("......test3......")
     println("net@ubx getRegistrableDomain should return None and print an error message if psl.printChecks=true ---> " + psl.getRegistrableDomain("net@ubx"))

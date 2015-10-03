@@ -17,6 +17,12 @@ object Rule {
     new Rule(matchPattern, exceptionRule)
   }
 
+  /**
+   * Orders prevailing rules higher.
+   *
+   * The rule with the highest getLabelCount is the prevailing rule.
+   * An exception rule is always the prevailing rule.
+   */
   implicit val order = new Ordering[Rule] {
     def compare(rule1: Rule, rule2: Rule): Int = {
       if (rule1.exceptionRule && rule2.exceptionRule) 0
