@@ -57,14 +57,14 @@ case class Rule(pattern: String, exceptionRule: Boolean) {
    * The label count is the number of constituent labels of a rule pattern,
    * it is used for determining the prevailing rule.
    */
-  def getLabelCount = Util.splitLabels(matcher.getPattern).length
+  def getLabelCount = matcher.getPattern.split('.').length
 
   /**
    * Returns the matched public suffix of a domain.
    */
   def doMatch(domain: String): Option[String] = {
     matcher.doMatch(domain).flatMap(mtch =>
-      if (exceptionRule) Option(Util.joinLabels(Util.splitLabels(mtch).drop(1).toList)) else Option(mtch))
+      if (exceptionRule) Option(mtch.split('.').drop(1).mkString(".")) else Option(mtch))
   }
 
   override def toString = if (exceptionRule) EXCEPTION_TOKEN + matcher.toString else matcher.toString

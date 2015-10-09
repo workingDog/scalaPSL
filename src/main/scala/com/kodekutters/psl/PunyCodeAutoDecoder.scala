@@ -9,7 +9,7 @@ import java.net.IDN
  * The recode() method will return the same format as the original input.
  *
  */
-final class PunycodeAutoDecoder() {
+final class PunyCodeAutoDecoder() {
   /**
    * the decode state
    */

@@ -17,6 +17,15 @@ object TestApp {
     test1(psl)
     test2(psl)
     test3(psl)
+  //  timeThis { for (i <- 0 to 20) test2(psl) }
+  }
+
+  private def timeThis[R](block: => R): R = {
+    val t0 = System.currentTimeMillis()
+    val result = block // call-by-name
+    val t1 = System.currentTimeMillis()
+    println("elapsed time: " + (t1 - t0) / 1000.0 + "s")
+    result
   }
 
   def test1(psl: PublicSuffixList): Unit = {
@@ -33,7 +42,6 @@ object TestApp {
     println("www.example.co.uk getRegistrableDomain should be Some(example.co.uk) ---> " + psl.getRegistrableDomain("www.example.co.uk"))
     println("食狮.com.cn getRegistrableDomain should be Some(食狮.com.cn) ---> " + psl.getRegistrableDomain("食狮.com.cn"))
     println("xn--85x722f.com.cn getRegistrableDomain should be Some(xn--85x722f.com.cn) ---> " + psl.getRegistrableDomain("xn--85x722f.com.cn"))
-    println()
   }
 
   def test2(psl: PublicSuffixList): Unit = {
@@ -133,7 +141,6 @@ object TestApp {
     psl.checkPublicSuffix("www.xn--85x722f.xn--fiqs8s", "xn--85x722f.xn--fiqs8s")
     psl.checkPublicSuffix("shishi.xn--fiqs8s", "shishi.xn--fiqs8s")
     psl.checkPublicSuffix("xn--fiqs8s", null)
-    println()
   }
 
   // bad characters tests
@@ -141,6 +148,5 @@ object TestApp {
     println("......test3......")
     println("net@ubx getRegistrableDomain should return None and print an error message if psl.printChecks=true ---> " + psl.getRegistrableDomain("net@ubx"))
   }
-
 
 }

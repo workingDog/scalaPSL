@@ -29,10 +29,7 @@ class Parser {
    * @param source contains the rules one to each line
    *
    */
-  def parse(source: BufferedSource): ParSeq[Rule] = {
-    val theList = for (line <- source.getLines()) yield parseLine(line)
-    theList.flatten.toList.par
-  }
+  def parse(source: BufferedSource): ParSeq[Rule] = (for (line <- source.getLines()) yield parseLine(line)).flatten.toList.par
 
   /**
    * Parse a string and return a rule or None if no rule was found

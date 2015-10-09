@@ -35,23 +35,21 @@ object PublicSuffixList {
   def getDefaults: Config = ConfigFactory.load()
 
   /**
-   * create a PublicSuffixList with custom properties.
+   * create a PublicSuffixList with the given properties.
    *
-   * @param properties the configuration properties for building the link PublicSuffixList.
-   * @return a public suffix list created with the given properties
+   * @param properties the configuration properties for building the PublicSuffixList.
    *
    */
   def apply(properties: Config): PublicSuffixList = {
     try {
       val printFlag = properties.getBoolean(PRINT_CHECKS)
       // default codec is "UTF-8"
-      implicit val charset = if (properties.getString(PROPERTY_CHARSET).isEmpty) Codec("UTF-8") else Codec(properties.getString(PROPERTY_CHARSET))
+      implicit val charset = if (properties.getString(PROPERTY_CHARSET).isEmpty) Codec.UTF8 else Codec(properties.getString(PROPERTY_CHARSET))
       // the PSL file from the url
       var sourceBuffer = Source.fromURL(new URL(properties.getString(PROPERTY_URL))) // implicit codec charset
       // parse the rules file into a list of rules and add the default rule to it
       val rules = Parser().parse(sourceBuffer) :+ Rule.DEFAULT_RULE
-      val ruleList = new RuleList(rules)
-      new PublicSuffixList(ruleList, printFlag)
+      new PublicSuffixList(new RuleList(rules), printFlag)
     } catch {
       case e: Exception => println("exception caught: " + e); null
     }
@@ -88,21 +86,21 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
    * Null, and empty string or domains with a leading dot or invalid input will return None.
    *
    * @param domain the domain name
-   * @return the registrable par of a domain, None if the domain is not registrable
+   * @return the registrable part of a domain, None if the domain is not registrable
    */
   def getRegistrableDomain(domain: String): Option[String] = {
     if (isValidInput(domain)) {
-      val punycode = new PunycodeAutoDecoder()
+      val punycode = new PunyCodeAutoDecoder()
       val decodedDomain = punycode.decode(domain.toLowerCase)
       doGetPublicSuffix(decodedDomain) match {
         case None => None
         case Some(suffix) =>
           if (decodedDomain == suffix) None
           else {
-            val suffixLabels = Util.splitLabels(suffix)
-            val labels = Util.splitLabels(decodedDomain)
+            val suffixLabels = suffix.split('.')
+            val labels = decodedDomain.split('.')
             val offset = labels.length - suffixLabels.length - 1
-            val registrableDomain = Util.joinLabels(labels.slice(offset, labels.length).toList)
+            val registrableDomain = labels.slice(offset, labels.length).mkString(".")
             Option(punycode.recode(registrableDomain))
           }
       }
@@ -133,7 +131,7 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
   def getPublicSuffix(domain: String): Option[String] = if (isValidInput(domain)) doGetPublicSuffix(domain) else None
 
   private def doGetPublicSuffix(domain: String): Option[String] = {
-    val punycode = new PunycodeAutoDecoder()
+    val punycode = new PunyCodeAutoDecoder()
     val decodedDomain = punycode.recode(domain.toLowerCase)
     ruleList.findRule(decodedDomain).flatMap(rule => rule.doMatch(decodedDomain).map(dmain => punycode.decode(dmain)))
   }

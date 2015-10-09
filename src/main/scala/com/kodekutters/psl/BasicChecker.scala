@@ -29,7 +29,7 @@ object BasicChecker {
         case str if str.length < 1 => if (printError) println(DOMAIN_TOO_SHORT + " input: " + input)
         case str if str.length > 255 => if (printError) println(DOMAIN_TOO_LONG + " input: " + input)
         case _ =>
-          for (label <- Util.splitLabels(ascii)) {
+          for (label <- ascii.split('.')) {
             label match {
               case lbl if lbl.length < 1 => if (printError) println(LABEL_TOO_SHORT + " input: " + input)
               case lbl if lbl.length > 63 => if (printError) println(LABEL_TOO_LONG + " input: " + input)
