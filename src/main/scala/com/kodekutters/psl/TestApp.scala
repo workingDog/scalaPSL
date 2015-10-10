@@ -32,16 +32,16 @@ object TestApp {
     println("......test1......")
     println("net isPublicSuffix should be true ---> " + psl.isPublicSuffix("net"))
     println("net isRegistrable should be false ---> " + psl.isRegistrable("net"))
-    println("net getRegistrableDomain should be None ---> " + psl.getRegistrableDomain("net"))
+    println("net getRegistrableDomain should be None ---> " + psl.registrableDomain("net"))
     println("example.net isPublicSuffix should be false ---> " + psl.isPublicSuffix("example.net"))
     println("example.net isRegistrable should be true ---> " + psl.isRegistrable("example.net"))
     println("www.example.net isRegistrable should be false ---> " + psl.isRegistrable("www.example.net"))
-    println("example.net getRegistrableDomain should be Some(example.net) ---> " + psl.getRegistrableDomain("example.net"))
-    println("www.example.net getRegistrableDomain should be Some(example.net) ---> " + psl.getRegistrableDomain("www.example.net"))
-    println("example.co.uk getRegistrableDomain should be Some(example.co.uk) ---> " + psl.getRegistrableDomain("example.co.uk"))
-    println("www.example.co.uk getRegistrableDomain should be Some(example.co.uk) ---> " + psl.getRegistrableDomain("www.example.co.uk"))
-    println("食狮.com.cn getRegistrableDomain should be Some(食狮.com.cn) ---> " + psl.getRegistrableDomain("食狮.com.cn"))
-    println("xn--85x722f.com.cn getRegistrableDomain should be Some(xn--85x722f.com.cn) ---> " + psl.getRegistrableDomain("xn--85x722f.com.cn"))
+    println("example.net getRegistrableDomain should be Some(example.net) ---> " + psl.registrableDomain("example.net"))
+    println("www.example.net getRegistrableDomain should be Some(example.net) ---> " + psl.registrableDomain("www.example.net"))
+    println("example.co.uk getRegistrableDomain should be Some(example.co.uk) ---> " + psl.registrableDomain("example.co.uk"))
+    println("www.example.co.uk getRegistrableDomain should be Some(example.co.uk) ---> " + psl.registrableDomain("www.example.co.uk"))
+    println("食狮.com.cn getRegistrableDomain should be Some(食狮.com.cn) ---> " + psl.registrableDomain("食狮.com.cn"))
+    println("xn--85x722f.com.cn getRegistrableDomain should be Some(xn--85x722f.com.cn) ---> " + psl.registrableDomain("xn--85x722f.com.cn"))
   }
 
   def test2(psl: PublicSuffixList): Unit = {
@@ -146,7 +146,7 @@ object TestApp {
   // bad characters tests
   def test3(psl: PublicSuffixList) = {
     println("......test3......")
-    println("net@ubx getRegistrableDomain should return None and print an error message if psl.printChecks=true ---> " + psl.getRegistrableDomain("net@ubx"))
+    println("net@ubx getRegistrableDomain should return None and print an error message if psl.printChecks=true ---> " + psl.registrableDomain("net@ubx"))
   }
 
 }

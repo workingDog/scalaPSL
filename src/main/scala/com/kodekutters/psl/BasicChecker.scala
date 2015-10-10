@@ -4,6 +4,8 @@ import java.net.IDN
 
 /**
  * a basic set of checks of a domain name input
+ *
+ * ref: https://github.com/wrangr/psl
  */
 object BasicChecker {
 
