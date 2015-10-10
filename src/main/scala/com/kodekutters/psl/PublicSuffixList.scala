@@ -70,7 +70,7 @@ object PublicSuffixList {
  *
  * https://publicsuffix.org/
  *
- * https://github.com/whois-server-list/public-suffix-list <-- the original java source code
+ * https://github.com/whois-server-list/public-suffix-list
  *
  */
 final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
@@ -126,6 +126,15 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
    */
   def publicSuffix(domain: String): Option[String] = if (isValidInput(domain)) getPublicSuffix(domain) else None
 
+  /**
+   * returns the public suffix of a domain.
+   *
+   * If the domain is already a public suffix, it will be returned unchanged.
+   * e.g. "www.example.net" will return "net".
+   *
+   * @param domain the domain name
+   * @return the public suffix of a domain, None if none found
+   */
   private def getPublicSuffix(domain: String): Option[String] = {
     val punycode = new PunyCodeAutoDecoder()
     val decodedDomain = punycode.recode(domain.toLowerCase)
