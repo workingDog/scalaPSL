@@ -154,16 +154,6 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
   private def isValidInput(domain: String): Boolean = !(domain == null || domain.isEmpty || domain.charAt(0) == '.' || !BasicChecker.isValid(domain, printFlag))
 
   /**
-   * for testing, see TestApp
-   */
-  def checkPublicSuffix(domain: String, expected: String): Unit = {
-    registrableDomain(domain) match {
-      case None => println(Option(expected).isEmpty + "  tld: " + tld(domain) + " sld: " + sld(domain) + " trd: " + trd(domain) + "  input domain: " + domain + " expected: " + expected)
-      case Some(regDomain) => println((regDomain == expected) + "  tld: " + tld(domain) + " sld: " + sld(domain) + " trd: " + trd(domain) + "  input domain: " + domain + " expected: " + expected)
-    }
-  }
-
-  /**
    * returns the top level public domain name if it exist else None
    */
   def tld(domain: String): Option[String] = {
