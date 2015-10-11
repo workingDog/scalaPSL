@@ -151,41 +151,37 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
    */
   def isPublicSuffix(domain: String): Boolean = if (isValidInput(domain)) getPublicSuffix(domain).contains(domain.toLowerCase) else false
 
+  /**
+   * do basic checks of the input domain name
+   */
   private def isValidInput(domain: String): Boolean = !(domain == null || domain.isEmpty || domain.charAt(0) == '.' || !BasicChecker.isValid(domain, printFlag))
 
   /**
    * returns the top level public domain name if it exist else None
    */
-  def tld(domain: String): Option[String] = {
-    registrable(domain) match {
-      case None => None
-      case Some(regDomain) =>
-        val labels = regDomain.split('.')
-        if (labels.length >= 1) Option(labels.last) else None
-    }
-  }
+  def tld(domain: String) = domainLevel(domain, 0)
 
   /**
    * returns the second level public domain name if it exist else None
    */
-  def sld(domain: String): Option[String] = {
-    registrable(domain) match {
-      case None => None
-      case Some(regDomain) =>
-        val labels = regDomain.split('.')
-        if (labels.length > 1) Option(labels.dropRight(1).last) else None
-    }
-  }
+  def sld(domain: String) = domainLevel(domain, 1)
 
   /**
    * returns the third level public domain name if it exist else None
    */
-  def trd(domain: String): Option[String] = {
+  def trd(domain: String) = domainLevel(domain, 2)
+
+  /**
+   * return the desired level public domain name if it exist else None
+   * @param domain input name
+   * @param level desired level
+   */
+  private def domainLevel(domain: String, level: Int): Option[String] = {
     registrable(domain) match {
       case None => None
       case Some(regDomain) =>
         val labels = regDomain.split('.')
-        if (labels.length > 2) Option(labels.dropRight(2).last) else None
+        if (labels.length > level) Option(labels.dropRight(level).last) else None
     }
   }
 
