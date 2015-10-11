@@ -36,7 +36,7 @@ object Rule {
    * Matches a string pattern with a string label.
    * Empty strings or null never match. Matching is case insensitive.
    *
-   * @return true if the label matches the pattern
+   * @return true if the label matches the rule pattern
    */
   private def isLabelMatch(pattern: String, label: String): Boolean = {
     if (pattern == null || pattern.isEmpty || label == null || label.isEmpty) false
@@ -83,7 +83,9 @@ case class Rule(pattern: String, exceptionRule: Boolean) {
         if (matchOk) {
           val mtch = reversedMatchedLabels.reverse.mkString(".")
           if (exceptionRule) Option(mtch.split('.').drop(1).mkString(".")) else Option(mtch)
-        } else None
+        }
+        else
+          None
       }
     }
   }

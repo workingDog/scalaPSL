@@ -84,7 +84,7 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
    * @param domain the domain name input
    * @return the registrable part of a domain, None if the domain is not registrable
    */
-  def registrableDomain(domain: String): Option[String] = {
+  def registrable(domain: String): Option[String] = {
     if (isValidInput(domain)) {
       val punycode = new PunyCodeAutoDecoder()
       val decodedDomain = punycode.decode(domain.toLowerCase)
@@ -113,7 +113,7 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
    * @param domain the domain name
    * @return true if the domain is registrable
    */
-  def isRegistrable(domain: String): Boolean = registrableDomain(domain).contains(domain.toLowerCase)
+  def isRegistrable(domain: String): Boolean = registrable(domain).contains(domain.toLowerCase)
 
   /**
    * returns the public suffix of a domain.
@@ -157,7 +157,7 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
    * returns the top level public domain name if it exist else None
    */
   def tld(domain: String): Option[String] = {
-    registrableDomain(domain) match {
+    registrable(domain) match {
       case None => None
       case Some(regDomain) =>
         val labels = regDomain.split('.')
@@ -169,7 +169,7 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
    * returns the second level public domain name if it exist else None
    */
   def sld(domain: String): Option[String] = {
-    registrableDomain(domain) match {
+    registrable(domain) match {
       case None => None
       case Some(regDomain) =>
         val labels = regDomain.split('.')
@@ -181,7 +181,7 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
    * returns the third level public domain name if it exist else None
    */
   def trd(domain: String): Option[String] = {
-    registrableDomain(domain) match {
+    registrable(domain) match {
       case None => None
       case Some(regDomain) =>
         val labels = regDomain.split('.')

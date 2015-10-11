@@ -21,10 +21,10 @@ object TestApp {
   }
 
   /**
-   * for testing the test data
+   * for testing the test data at: https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt
    */
   private def checkPublicSuffix(domain: String, expected: String)(implicit psl: PublicSuffixList): Unit = {
-    psl.registrableDomain(domain) match {
+    psl.registrable(domain) match {
       case None => println(Option(expected).isEmpty + "  tld: " + psl.tld(domain) + " sld: " + psl.sld(domain) + " trd: " + psl.trd(domain) + "  input domain: " + domain + " expected: " + expected)
       case Some(regDomain) => println((regDomain == expected) + "  tld: " + psl.tld(domain) + " sld: " + psl.sld(domain) + " trd: " + psl.trd(domain) + "  input domain: " + domain + " expected: " + expected)
     }
@@ -32,9 +32,6 @@ object TestApp {
 
   /**
    * for timing a block of code
-   * @param block
-   * @tparam R
-   * @return
    */
   private def timeThis[R](block: => R): R = {
     val t0 = System.currentTimeMillis()
@@ -48,16 +45,16 @@ object TestApp {
     println("......test1......")
     println("net isPublicSuffix should be true ---> " + psl.isPublicSuffix("net"))
     println("net isRegistrable should be false ---> " + psl.isRegistrable("net"))
-    println("net getRegistrableDomain should be None ---> " + psl.registrableDomain("net"))
+    println("net getRegistrableDomain should be None ---> " + psl.registrable("net"))
     println("example.net isPublicSuffix should be false ---> " + psl.isPublicSuffix("example.net"))
     println("example.net isRegistrable should be true ---> " + psl.isRegistrable("example.net"))
     println("www.example.net isRegistrable should be false ---> " + psl.isRegistrable("www.example.net"))
-    println("example.net getRegistrableDomain should be Some(example.net) ---> " + psl.registrableDomain("example.net"))
-    println("www.example.net getRegistrableDomain should be Some(example.net) ---> " + psl.registrableDomain("www.example.net"))
-    println("example.co.uk getRegistrableDomain should be Some(example.co.uk) ---> " + psl.registrableDomain("example.co.uk"))
-    println("www.example.co.uk getRegistrableDomain should be Some(example.co.uk) ---> " + psl.registrableDomain("www.example.co.uk"))
-    println("食狮.com.cn getRegistrableDomain should be Some(食狮.com.cn) ---> " + psl.registrableDomain("食狮.com.cn"))
-    println("xn--85x722f.com.cn getRegistrableDomain should be Some(xn--85x722f.com.cn) ---> " + psl.registrableDomain("xn--85x722f.com.cn"))
+    println("example.net getRegistrableDomain should be Some(example.net) ---> " + psl.registrable("example.net"))
+    println("www.example.net getRegistrableDomain should be Some(example.net) ---> " + psl.registrable("www.example.net"))
+    println("example.co.uk getRegistrableDomain should be Some(example.co.uk) ---> " + psl.registrable("example.co.uk"))
+    println("www.example.co.uk getRegistrableDomain should be Some(example.co.uk) ---> " + psl.registrable("www.example.co.uk"))
+    println("食狮.com.cn getRegistrableDomain should be Some(食狮.com.cn) ---> " + psl.registrable("食狮.com.cn"))
+    println("xn--85x722f.com.cn getRegistrableDomain should be Some(xn--85x722f.com.cn) ---> " + psl.registrable("xn--85x722f.com.cn"))
   }
 
   def test2(implicit psl: PublicSuffixList): Unit = {
@@ -162,7 +159,7 @@ object TestApp {
   // bad characters tests
   def test3(psl: PublicSuffixList) = {
     println("......test3......")
-    println("net@ubx getRegistrableDomain should return None and print an error message if psl.printChecks=true ---> " + psl.registrableDomain("net@ubx"))
+    println("net@ubx getRegistrableDomain should return None and print an error message if psl.printChecks=true ---> " + psl.registrable("net@ubx"))
   }
 
 }
