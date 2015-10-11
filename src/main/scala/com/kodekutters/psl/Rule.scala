@@ -32,6 +32,18 @@ object Rule {
     }
   }
 
+  /**
+   * Matches a string pattern with a string label.
+   * Empty strings or null never match. Matching is case insensitive.
+   *
+   * @return true if the label matches the pattern
+   */
+  private def isLabelMatch(pattern: String, label: String): Boolean = {
+    if (pattern == null || pattern.isEmpty || label == null || label.isEmpty) false
+    else if (pattern == Rule.WILDCARD) true
+    else pattern.equalsIgnoreCase(label)
+  }
+
 }
 
 /**
@@ -46,27 +58,42 @@ case class Rule(pattern: String, exceptionRule: Boolean) {
 
   import Rule._
 
-  private val matcher = new RuleMatcher(pattern)
+  /**
+   * Rule labels in reversed order.
+   */
+  private val reversedLabels = pattern.split('.').reverse
 
   /**
-   * returns the rule pattern without the exception token "!"
+   * Returns the matched public suffix of the input domain name
    */
-  def getPattern = matcher.getPattern
+  def doMatch(domain: String): Option[String] = {
+    if (domain == null || domain.isEmpty) None
+    else {
+      val reversedDomainLabels = domain.split('.').reverse
+      if (reversedDomainLabels.length < reversedLabels.length) None
+      else {
+        val reversedMatchedLabels = new Array[String](reversedLabels.length)
+        var matchOk = true
+        for (i <- reversedLabels.indices) {
+          if (i < reversedDomainLabels.length && isLabelMatch(reversedLabels(i), reversedDomainLabels(i)))
+            reversedMatchedLabels(i) = reversedDomainLabels(i)
+          else
+            matchOk = false
+        }
+        if (matchOk) {
+          val mtch = reversedMatchedLabels.reverse.mkString(".")
+          if (exceptionRule) Option(mtch.split('.').drop(1).mkString(".")) else Option(mtch)
+        } else None
+      }
+    }
+  }
 
   /**
    * The label count is the number of constituent labels of a rule pattern,
    * it is used for determining the prevailing rule.
    */
-  def getLabelCount = matcher.getPattern.split('.').length
+  def getLabelCount: Int = pattern.split('.').length
 
-  /**
-   * Returns the matched public suffix of a domain.
-   */
-  def doMatch(domain: String): Option[String] = {
-    matcher.doMatch(domain).flatMap(mtch =>
-      if (exceptionRule) Option(mtch.split('.').drop(1).mkString(".")) else Option(mtch))
-  }
-
-  override def toString = if (exceptionRule) EXCEPTION_TOKEN + matcher.toString else matcher.toString
+  override def toString = if (exceptionRule) EXCEPTION_TOKEN + pattern else pattern
 
 }
