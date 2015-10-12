@@ -2,6 +2,7 @@ package com.kodekutters.psl
 
 import java.net.URL
 import com.typesafe.config.{ConfigFactory, Config}
+import scala.collection.mutable
 import scala.io.{Codec, Source}
 
 /**
@@ -159,29 +160,44 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
   /**
    * returns the top level public domain name if it exist else None
    */
-  def tld(domain: String) = domainLevel(domain, 0)
+  def tld(domain: String) = domainLevel(domain, 1)
 
   /**
    * returns the second level public domain name if it exist else None
    */
-  def sld(domain: String) = domainLevel(domain, 1)
+  def sld(domain: String) = domainLevel(domain, 2)
 
   /**
    * returns the third level public domain name if it exist else None
    */
-  def trd(domain: String) = domainLevel(domain, 2)
+  def trd(domain: String) = domainLevel(domain, 3)
 
   /**
-   * return the desired level public domain name if it exist else None
-   * @param domain input name
-   * @param level desired level
+   * returns the desired registrable public domain level name if it exist else None
+   * @param domain input domain name
+   * @param level desired level should be > 0, e.g. level=1 gives TLD
    */
-  private def domainLevel(domain: String, level: Int): Option[String] = {
+  def domainLevel(domain: String, level: Int): Option[String] = {
+    if(level < 1) None
+    else {
+      val lvl = level - 1
+      registrable(domain) match {
+        case None => None
+        case Some(regDomain) =>
+          val labels = regDomain.split('.')
+          if (labels.length > lvl) Option(labels.dropRight(lvl).last) else None
+      }
+    }
+  }
+
+  /**
+   * returns all registrable public domain levels as an Array[String] starting with TLD at index 0
+   * @param domain input domain name
+   */
+  def domainLevels(domain: String): Array[String] = {
     registrable(domain) match {
-      case None => None
-      case Some(regDomain) =>
-        val labels = regDomain.split('.')
-        if (labels.length > level) Option(labels.dropRight(level).last) else None
+      case None => Array[String]()
+      case Some(regDomain) => for(label <- regDomain.split('.').reverse) yield label
     }
   }
 
