@@ -28,7 +28,7 @@ object Rule {
       if (rule1.exceptionRule && rule2.exceptionRule) 0
       else if (rule1.exceptionRule) 1
       else if (rule2.exceptionRule) -1
-      else rule1.getLabelCount.compareTo(rule2.getLabelCount)
+      else rule1.labelCount.compareTo(rule2.labelCount)
     }
   }
 
@@ -94,7 +94,7 @@ case class Rule(pattern: String, exceptionRule: Boolean) {
    * The label count is the number of constituent labels of a rule pattern,
    * it is used for determining the prevailing rule.
    */
-  def getLabelCount: Int = pattern.split('.').length
+  val labelCount: Int = pattern.split('.').length
 
   override def toString = if (exceptionRule) EXCEPTION_TOKEN + pattern else pattern
 
