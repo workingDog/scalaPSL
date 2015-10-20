@@ -6,39 +6,39 @@ import scala.collection.mutable
 import scala.io.{Codec, Source}
 
 /**
- * The Public Suffix List.
- *
- */
+  * The Public Suffix List.
+  *
+  */
 object PublicSuffixList {
 
   /**
-   * URL to the Public Suffix List (PSL). for example:
-   *
-   * "https://publicsuffix.org/list/public_suffix_list.dat" or
-   * "file:///Users/.../src/main/resources/public_suffix_list.dat"
-   *
-   */
+    * URL to the Public Suffix List (PSL). for example:
+    *
+    * "https://publicsuffix.org/list/public_suffix_list.dat" or
+    * "file:///Users/.../src/main/resources/public_suffix_list.dat"
+    *
+    */
   val PROPERTY_URL = "psl.url"
   /**
-   * Character encoding of the list.
-   */
+    * Character encoding of the list.
+    */
   val PROPERTY_CHARSET = "psl.charset"
   /**
-   * if true print the basic input checks error messages, else suppress the printing, see BasicChecker
-   */
+    * if true print the basic input checks error messages, else suppress the printing, see BasicChecker
+    */
   val PRINT_CHECKS = "psl.printChecks"
 
   /**
-   * loads the default properties from the application.conf file in the resources directory.
-   */
+    * loads the default properties from the application.conf file in the resources directory.
+    */
   def getDefaults: Config = ConfigFactory.load()
 
   /**
-   * create a PublicSuffixList with the given properties.
-   *
-   * @param properties the configuration properties for building the PublicSuffixList.
-   *
-   */
+    * create a PublicSuffixList with the given properties.
+    *
+    * @param properties the configuration properties for building the PublicSuffixList.
+    *
+    */
   def apply(properties: Config): PublicSuffixList = {
     try {
       val printFlag = properties.getBoolean(PRINT_CHECKS)
@@ -55,51 +55,48 @@ object PublicSuffixList {
   }
 
   /**
-   * create a PublicSuffixList with the default properties.
-   */
+    * create a PublicSuffixList with the default properties.
+    */
   def apply(): PublicSuffixList = apply(getDefaults)
 
 }
 
 /**
- * The Public Suffix List.
- *
- * Use UTF-8 domain names or Punycode encoded ASCII domain names in the methods.
- * The methods will return the results in the same type as their input.
- *
- * references:
- *
- * https://publicsuffix.org/
- *
- * https://github.com/whois-server-list/public-suffix-list
- *
- */
+  * The Public Suffix List.
+  *
+  * Use UTF-8 domain names or Punycode encoded ASCII domain names in the methods.
+  * The methods will return the results in the same type as their input.
+  *
+  * references:
+  *
+  * https://publicsuffix.org/
+  *
+  * https://github.com/whois-server-list/public-suffix-list
+  *
+  */
 final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
 
   /**
-   * returns the registrable par of a domain.
-   *
-   * E.g. "www.example.net" and "example.net" will return "example.net".
-   * Null, and empty string or domains with a leading dot or invalid input will return None.
-   *
-   * @param domain the domain name input
-   * @return the registrable part of a domain, None if the domain is not registrable
-   */
+    * returns the registrable par of a domain.
+    *
+    * E.g. "www.example.net" and "example.net" will return "example.net".
+    * Null, and empty string or domains with a leading dot or invalid input will return None.
+    *
+    * @param domain the domain name input
+    * @return the registrable part of a domain, None if the domain is not registrable
+    */
   def registrable(domain: String): Option[String] = {
     if (isValidInput(domain)) {
       val punycode = new PunyCodeAutoDecoder()
       val decodedDomain = punycode.decode(domain.toLowerCase)
       getPublicSuffix(decodedDomain) match {
-        case None => None
-        case Some(suffix) =>
-          if (decodedDomain == suffix) None
-          else {
-            val suffixLabels = suffix.split('.')
-            val labels = decodedDomain.split('.')
-            val offset = labels.length - suffixLabels.length - 1
-            val registrableDomain = labels.slice(offset, labels.length).mkString(".")
-            Option(punycode.recode(registrableDomain))
-          }
+        case Some(suffix) if decodedDomain != suffix =>
+          val labels = decodedDomain.split('.')
+          val offset = labels.length - suffix.split('.').length - 1
+          val registrableDomain = labels.slice(offset, labels.length).mkString(".")
+          Option(punycode.recode(registrableDomain))
+
+        case _ => None
       }
     }
     else
@@ -107,35 +104,35 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
   }
 
   /**
-   * determines if a domain is registrable.
-   *
-   * E.g. "example.net" is registrable, "www.example.net" and "net" are not.
-   *
-   * @param domain the domain name
-   * @return true if the domain is registrable
-   */
+    * determines if a domain is registrable.
+    *
+    * E.g. "example.net" is registrable, "www.example.net" and "net" are not.
+    *
+    * @param domain the domain name
+    * @return true if the domain is registrable
+    */
   def isRegistrable(domain: String): Boolean = registrable(domain).contains(domain.toLowerCase)
 
   /**
-   * returns the public suffix of a domain.
-   *
-   * If the domain is already a public suffix, it will be returned unchanged.
-   * e.g. "www.example.net" will return "net".
-   *
-   * @param domain the domain name
-   * @return the public suffix of a domain, None if none found
-   */
+    * returns the public suffix of a domain.
+    *
+    * If the domain is already a public suffix, it will be returned unchanged.
+    * e.g. "www.example.net" will return "net".
+    *
+    * @param domain the domain name
+    * @return the public suffix of a domain, None if none found
+    */
   def publicSuffix(domain: String): Option[String] = if (isValidInput(domain)) getPublicSuffix(domain) else None
 
   /**
-   * returns the public suffix of a domain.
-   *
-   * If the domain is already a public suffix, it will be returned unchanged.
-   * e.g. "www.example.net" will return "net".
-   *
-   * @param domain the domain name
-   * @return the public suffix of a domain, None if none found
-   */
+    * returns the public suffix of a domain.
+    *
+    * If the domain is already a public suffix, it will be returned unchanged.
+    * e.g. "www.example.net" will return "net".
+    *
+    * @param domain the domain name
+    * @return the public suffix of a domain, None if none found
+    */
   private def getPublicSuffix(domain: String): Option[String] = {
     val punycode = new PunyCodeAutoDecoder()
     val decodedDomain = punycode.recode(domain.toLowerCase)
@@ -143,42 +140,42 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
   }
 
   /**
-   * determines if a domain is a public suffix or not.
-   *
-   * e.g. "com" is a public suffix, "example.com" is not.
-   *
-   * @param domain the domain name
-   * @return true if the domain is a public suffix
-   */
+    * determines if a domain is a public suffix or not.
+    *
+    * e.g. "com" is a public suffix, "example.com" is not.
+    *
+    * @param domain the domain name
+    * @return true if the domain is a public suffix
+    */
   def isPublicSuffix(domain: String): Boolean = if (isValidInput(domain)) getPublicSuffix(domain).contains(domain.toLowerCase) else false
 
   /**
-   * do basic checks of the input domain name
-   */
+    * do basic checks of the input domain name
+    */
   private def isValidInput(domain: String): Boolean = !(domain == null || domain.isEmpty || domain.charAt(0) == '.' || !BasicChecker.isValid(domain, printFlag))
 
   /**
-   * returns the top level public domain name if it exist else None
-   */
+    * returns the top level public domain name if it exist else None
+    */
   def tld(domain: String) = domainLevel(domain, 1)
 
   /**
-   * returns the second level public domain name if it exist else None
-   */
+    * returns the second level public domain name if it exist else None
+    */
   def sld(domain: String) = domainLevel(domain, 2)
 
   /**
-   * returns the third level public domain name if it exist else None
-   */
+    * returns the third level public domain name if it exist else None
+    */
   def trd(domain: String) = domainLevel(domain, 3)
 
   /**
-   * returns the desired registrable public domain level name if it exist else None
-   * @param domain input domain name
-   * @param level desired level should be > 0, e.g. level=1 gives TLD
-   */
+    * returns the desired registrable public domain level name if it exist else None
+    * @param domain input domain name
+    * @param level desired level should be > 0, e.g. level=1 gives TLD
+    */
   def domainLevel(domain: String, level: Int): Option[String] = {
-    if(level < 1) None
+    if (level < 1) None
     else {
       val lvl = level - 1
       registrable(domain) match {
@@ -191,13 +188,13 @@ final class PublicSuffixList(val ruleList: RuleList, val printFlag: Boolean) {
   }
 
   /**
-   * returns all registrable public domain levels as an Array[String] starting with TLD at index 0
-   * @param domain input domain name
-   */
+    * returns all registrable public domain levels as an Array[String] starting with TLD at index 0
+    * @param domain input domain name
+    */
   def domainLevels(domain: String): Array[String] = {
     registrable(domain) match {
       case None => Array[String]()
-      case Some(regDomain) => for(label <- regDomain.split('.').reverse) yield label
+      case Some(regDomain) => for (label <- regDomain.split('.').reverse) yield label
     }
   }
 
