@@ -2,7 +2,6 @@ package com.kodekutters.psl
 
 import java.net.URL
 import com.typesafe.config.{ConfigFactory, Config}
-import scala.collection.mutable
 import scala.io.{Codec, Source}
 
 /**
@@ -10,23 +9,6 @@ import scala.io.{Codec, Source}
   *
   */
 object PublicSuffixList {
-
-  /**
-    * URL to the Public Suffix List (PSL). for example:
-    *
-    * "https://publicsuffix.org/list/public_suffix_list.dat" or
-    * "file:///Users/.../src/main/resources/public_suffix_list.dat"
-    *
-    */
-  val PROPERTY_URL = "psl.url"
-  /**
-    * Character encoding of the list.
-    */
-  val PROPERTY_CHARSET = "psl.charset"
-  /**
-    * if true print the basic input checks error messages, else suppress the printing, see BasicChecker
-    */
-  val PRINT_CHECKS = "psl.printChecks"
 
   /**
     * loads the default properties from the application.conf file in the resources directory.
@@ -41,11 +23,12 @@ object PublicSuffixList {
     */
   def apply(properties: Config): PublicSuffixList = {
     try {
-      val printFlag = properties.getBoolean(PRINT_CHECKS)
-      // default codec is "UTF-8"
-      implicit val charset = if (properties.getString(PROPERTY_CHARSET).isEmpty) Codec.UTF8 else Codec(properties.getString(PROPERTY_CHARSET))
-      // the PSL file from the url
-      var sourceBuffer = Source.fromURL(new URL(properties.getString(PROPERTY_URL))) // implicit codec charset
+      // if true print the basic input checks error messages, else suppress the printing, see BasicChecker
+      val printFlag = properties.getBoolean("psl.printChecks")
+      // character encoding of the list, default codec is "UTF-8"
+      implicit val charset = if (properties.getString("psl.charset").isEmpty) Codec.UTF8 else Codec(properties.getString("psl.charset"))
+      // the PSL file from the URL to the Public Suffix List (PSL).
+      var sourceBuffer = Source.fromURL(new URL(properties.getString("psl.url"))) // implicit codec charset
       // parse the rules file into a list of rules and add the default rule to it
       val rules = Parser().parse(sourceBuffer) :+ Rule.DEFAULT_RULE
       new PublicSuffixList(new RuleList(rules), printFlag)

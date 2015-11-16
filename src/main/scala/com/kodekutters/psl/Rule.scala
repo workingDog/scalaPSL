@@ -2,8 +2,8 @@ package com.kodekutters.psl
 
 
 /**
- * The Public Suffix rule.
- */
+  * The Public Suffix rule.
+  */
 
 object Rule {
 
@@ -18,11 +18,11 @@ object Rule {
   }
 
   /**
-   * Orders prevailing rules higher.
-   *
-   * The rule with the highest getLabelCount is the prevailing rule.
-   * An exception rule is always the prevailing rule.
-   */
+    * Orders prevailing rules higher.
+    *
+    * The rule with the highest getLabelCount is the prevailing rule.
+    * An exception rule is always the prevailing rule.
+    */
   implicit val order = new Ordering[Rule] {
     def compare(rule1: Rule, rule2: Rule): Int = {
       if (rule1.exceptionRule && rule2.exceptionRule) 0
@@ -33,11 +33,11 @@ object Rule {
   }
 
   /**
-   * Matches a string pattern with a string label.
-   * Empty strings or null never match. Matching is case insensitive.
-   *
-   * @return true if the label matches the rule pattern
-   */
+    * Matches a string pattern with a string label.
+    * Empty strings or null never match. Matching is case insensitive.
+    *
+    * @return true if the label matches the rule pattern
+    */
   private def isLabelMatch(pattern: String, label: String): Boolean = {
     if (pattern == null || pattern.isEmpty || label == null || label.isEmpty) false
     else if (pattern == Rule.WILDCARD) true
@@ -47,11 +47,11 @@ object Rule {
 }
 
 /**
- * A Public Suffix rule.
- *
- * @param pattern  the rule matching pattern
- * @param exceptionRule  is an exception rule or not
- */
+  * A Public Suffix rule.
+  *
+  * @param pattern  the rule matching pattern
+  * @param exceptionRule  is an exception rule or not
+  */
 case class Rule(pattern: String, exceptionRule: Boolean) {
 
   def this(pattern: String) = this(pattern, false)
@@ -59,13 +59,13 @@ case class Rule(pattern: String, exceptionRule: Boolean) {
   import Rule._
 
   /**
-   * Rule labels in reversed order.
-   */
+    * Rule labels in reversed order.
+    */
   private val reversedLabels = pattern.split('.').reverse
 
   /**
-   * Returns the matched public suffix of the input domain name
-   */
+    * Returns the matched public suffix of the input domain name
+    */
   def doMatch(domain: String): Option[String] = {
     if (domain == null || domain.isEmpty) None
     else {
@@ -91,9 +91,9 @@ case class Rule(pattern: String, exceptionRule: Boolean) {
   }
 
   /**
-   * The label count is the number of constituent labels of a rule pattern,
-   * it is used for determining the prevailing rule.
-   */
+    * The label count is the number of constituent labels of a rule pattern,
+    * it is used for determining the prevailing rule.
+    */
   val labelCount: Int = pattern.split('.').length
 
   override def toString = if (exceptionRule) EXCEPTION_TOKEN + pattern else pattern
