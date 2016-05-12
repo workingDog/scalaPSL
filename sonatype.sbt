@@ -1,8 +1,8 @@
 
 pomExtra := {
   <scm>
-    <url>https://github.com/workingDog/scalakml</url>
-    <connection>scm:git:git@github.com:workingDog/scalakml.git</connection>
+    <url>https://github.com/workingDog/scalaPSL</url>
+    <connection>scm:git:git@github.com:workingDog/scalaPSL.git</connection>
   </scm>
     <developers>
       <developer>
@@ -36,4 +36,3 @@ releaseProcess := Seq[ReleaseStep](
   commitNextVersion,
   pushChanges
 )
-

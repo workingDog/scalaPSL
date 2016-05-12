@@ -17,12 +17,24 @@ Since there was and remains no algorithmic method of finding the highest level a
 may be registered for a particular top-level domain (the policies differ with each registry), 
 the only method is to create a list. This is the aim of the Public Suffix List.
 
-This Scala library presents a simple API to use the Public Suffix List. 
+This Scala library (**scalaspl**) presents a simple API to use the Public Suffix List. 
 This Scala library is a basic conversion of the [Java code of reference 2] (https://github.com/whois-server-list/public-suffix-list)
 
 ## Documentation
 
 The Public Suffix List is a list of simple rules for all known public suffixes, see [documentation](https://publicsuffix.org/)
+
+## Installation
+
+Add the following dependency to build.sbt:
+
+    libraryDependencies += "com.github.workingDog" %% "scalaspl" % "1.0"
+
+To compile and generate a jar file from source:
+
+    sbt package
+
+The jar file (scalaspl_2.11-1.0.jar) will be in the "./target/scala-2.11" directory.
 
 ## References
 
@@ -47,10 +59,10 @@ If you do not want to read the list from the internet, use something like:
 
 ## Dependencies
 
-Uses scala 2.11.7 and TypeSafe [Configuration library for JVM languages] (https://github.com/typesafehub/config). 
+Uses scala 2.11.8 and TypeSafe [Configuration library for JVM languages] (https://github.com/typesafehub/config). 
 The latest "Public Suffix List" can be obtained from reference 1. 
 
-## Status
+## Status 
 
 Passes all tests, see TestApp.scala and the [test file] (https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt)
 
