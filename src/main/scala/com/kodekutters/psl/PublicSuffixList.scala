@@ -30,7 +30,7 @@ object PublicSuffixList {
       // the PSL file from the URL to the Public Suffix List (PSL).
       var sourceBuffer = Source.fromURL(new URL(properties.getString("psl.url"))) // implicit codec charset
       // parse the rules file into a list of rules and add the default rule to it
-      val rules = Parser().parse(sourceBuffer) :+ Rule.DEFAULT_RULE
+      val rules = Parser().parse(sourceBuffer)
       new PublicSuffixList(new RuleList(rules), printFlag)
     } catch {
       case e: Exception => println("exception caught: " + e); null
