@@ -38,9 +38,9 @@ object Rule {
     *
     * @return true if the label matches the rule pattern
     */
-  private def isLabelMatch(pattern: String, label: String): Boolean = {
+  private def isLabelMatch(pattern: String, label: String, patternIndex: Integer): Boolean = {
     if (pattern == null || pattern.isEmpty || label == null || label.isEmpty) false
-    else if (pattern == Rule.WILDCARD) true
+    else if (pattern == Rule.WILDCARD && patternIndex > 0) true // Do not use the Wildcard rule for TLDs
     else pattern.equalsIgnoreCase(label)
   }
 
@@ -75,7 +75,7 @@ case class Rule(pattern: String, exceptionRule: Boolean) {
         val reversedMatchedLabels = new Array[String](reversedLabels.length)
         var matchOk = true
         for (i <- reversedLabels.indices) {
-          if (i < reversedDomainLabels.length && isLabelMatch(reversedLabels(i), reversedDomainLabels(i)))
+          if (i < reversedDomainLabels.length && isLabelMatch(reversedLabels(i), reversedDomainLabels(i), i))
             reversedMatchedLabels(i) = reversedDomainLabels(i)
           else
             matchOk = false
