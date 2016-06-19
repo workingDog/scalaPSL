@@ -2,14 +2,14 @@ package com.kodekutters.psl
 
 
 /**
- * test of the PublicSuffixList
- *
- * references:
- *
- * https://publicsuffix.org/list/
- *
- * https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt
- */
+  * test of the PublicSuffixList
+  *
+  * references:
+  *
+  * https://publicsuffix.org/list/
+  *
+  * https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt
+  */
 object TestApp {
 
   def main(args: Array[String]) {
@@ -17,12 +17,12 @@ object TestApp {
     test1(psl)
     test2(psl)
     test3(psl)
-  //  timeThis { for (i <- 0 to 20) test2(psl) }
+    //  timeThis { for (i <- 0 to 20) test2(psl) }
   }
 
   /**
-   * for testing the test data at: https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt
-   */
+    * for testing the test data at: https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt
+    */
   private def checkPublicSuffix(domain: String, expected: String)(implicit psl: PublicSuffixList): Unit = {
     psl.registrable(domain) match {
       case None => println(Option(expected).isEmpty + "  tld: " + psl.tld(domain) + " sld: " + psl.sld(domain) + " trd: " + psl.trd(domain) + "  input domain: " + domain + " expected: " + expected)
@@ -31,8 +31,8 @@ object TestApp {
   }
 
   /**
-   * for timing a block of code
-   */
+    * for timing a block of code
+    */
   private def timeThis[R](block: => R): R = {
     val t0 = System.currentTimeMillis()
     val result = block // call-by-name
@@ -72,9 +72,9 @@ object TestApp {
     checkPublicSuffix(".example.example", null)
     // Unlisted TLD.
     checkPublicSuffix("example", null)
-    checkPublicSuffix("example.example", "example.example")
-    checkPublicSuffix("b.example.example", "example.example")
-    checkPublicSuffix("a.b.example.example", "example.example")
+    checkPublicSuffix("example.example", null)     // as of 1.1-snapshot no wildcard for TLD, was "example.example"
+    checkPublicSuffix("b.example.example", null)   // as of 1.1-snapshot no wildcard for TLD, was "example.example"
+    checkPublicSuffix("a.b.example.example", null) // as of 1.1-snapshot no wildcard for TLD, was "example.example"
     // Listed, but non-Internet, TLD.
     // checkPublicSuffix("local", null)
     // checkPublicSuffix("example.local", null)
@@ -97,9 +97,9 @@ object TestApp {
     checkPublicSuffix("test.ac", "test.ac")
     // TLD with only 1 (wildcard) rule.
     checkPublicSuffix("il", null)
-    checkPublicSuffix("c.il", null)
-    checkPublicSuffix("b.c.il", "b.c.il")
-    checkPublicSuffix("a.b.c.il", "b.c.il")
+    checkPublicSuffix("c.il", "c.il")  // as of 1.1-snapshot no wildcard for TLD, was null
+    checkPublicSuffix("b.c.il", "c.il") // as of 1.1-snapshot no wildcard for TLD, was "b.c.il"
+    checkPublicSuffix("a.b.c.il", "c.il") // as of 1.1-snapshot no wildcard for TLD, was "b.c.il"
     // More complex TLD.
     checkPublicSuffix("jp", null)
     checkPublicSuffix("test.jp", "test.jp")
