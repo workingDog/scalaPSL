@@ -18,7 +18,7 @@ may be registered for a particular top-level domain (the policies differ with ea
 the only method is to create a list. This is the aim of the Public Suffix List.
 
 This Scala library (**scalaspl**) presents a simple API to use the Public Suffix List. 
-This Scala library is a basic conversion of the [Java code of reference 2] (https://github.com/whois-server-list/public-suffix-list)
+This Scala library is a basic conversion of the [Java code of reference 2](https://github.com/whois-server-list/public-suffix-list)
 
 ## Documentation
 
@@ -38,11 +38,11 @@ The jar file (scalaspl_2.11-1.1-SNAPSHOT.jar) will be in the "./target/scala-2.1
 
 ## References
 
-1) The Public Suffix List at: https://publicsuffix.org/
+1) [The Public Suffix List](https://publicsuffix.org/)
 
-2) Original java code at: https://github.com/whois-server-list/public-suffix-list
+2) [Original java code](https://github.com/whois-server-list/public-suffix-list)
 
-3) Other code at: https://github.com/wrangr/psl
+3) [Other code](https://github.com/wrangr/psl)
 
 ## How to use
 
@@ -59,10 +59,10 @@ If you do not want to read the list from the internet, use something like:
 
 ## Dependencies
 
-Uses scala 2.11.8 and TypeSafe [Configuration library for JVM languages] (https://github.com/typesafehub/config). 
+Uses scala 2.11.8 and TypeSafe [Configuration library for JVM languages](https://github.com/typesafehub/config). 
 The latest "Public Suffix List" can be obtained from reference 1. 
 
 ## Status 
 
-Passes all tests, see TestApp.scala and the [test file] (https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt)
+Passes all tests, see TestApp.scala and the [test file](https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt)
 
