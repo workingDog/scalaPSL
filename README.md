@@ -59,7 +59,7 @@ If you do not want to read the list from the internet, use something like:
 
 ## Dependencies
 
-Uses scala 2.11.8 and TypeSafe [Configuration library for JVM languages](https://github.com/typesafehub/config). 
+Uses scala 2.11.11 and TypeSafe [Configuration library for JVM languages](https://github.com/typesafehub/config). 
 The latest "Public Suffix List" can be obtained from reference 1. 
 
 ## Status 
