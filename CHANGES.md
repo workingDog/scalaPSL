@@ -5,3 +5,4 @@ Change Log
 
 * changed Rule to disallow the wildcard for TLD
 * changed some tests, see TestApp
+* update to libs

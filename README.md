@@ -46,7 +46,7 @@ The jar file (scalaspl_2.11-1.1-SNAPSHOT.jar) will be in the "./target/scala-2.1
 
 ## How to use
 
-Very simple to use, see the Example.scala and TestApp.scala.
+Very simple to use, see the **Example.scala** and **TestApp.scala**.
 
 To read the PSL directly from reference 1, you need to be connected to the internet and 
 have the following property set in the configuration (typically application.conf):
