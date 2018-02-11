@@ -28,7 +28,7 @@ object PublicSuffixList {
       // character encoding of the list, default codec is "UTF-8"
       implicit val charset = if (properties.getString("psl.charset").isEmpty) Codec.UTF8 else Codec(properties.getString("psl.charset"))
       // the PSL file from the URL to the Public Suffix List (PSL).
-      var sourceBuffer = Source.fromURL(new URL(properties.getString("psl.url"))) // implicit codec charset
+      val sourceBuffer = Source.fromURL(new URL(properties.getString("psl.url"))) // implicit codec charset
       // parse the rules file into a list of rules and add the default rule to it
       val rules = Parser().parse(sourceBuffer) :+ Rule.DEFAULT_RULE
       new PublicSuffixList(new RuleList(rules), printFlag)

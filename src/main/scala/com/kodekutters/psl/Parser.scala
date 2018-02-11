@@ -9,15 +9,15 @@ import scala.io.BufferedSource
  */
 object Parser {
 
-  private var ruleLine = """^(\S+)""".r.pattern
-  private var commentLine = """^//.*$""".r.pattern
-  private var whiteSpaceLine = """^\\s*$""".r.pattern
+  val ruleLine = """^(\S+)""".r.pattern
+  val commentLine = """^//.*$""".r.pattern
+  val whiteSpaceLine = """^\\s*$""".r.pattern
 
   def apply() = new Parser()
 }
 
 /**
- * The Public Suffix List source input is returned as a list of {@link Rule}.
+ * The Public Suffix List source input is returned as a list of Rules.
  */
 class Parser {
 
