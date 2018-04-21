@@ -31,11 +31,12 @@ Add the following dependency to your application build.sbt:
 
     libraryDependencies += "com.github.workingDog" %% "scalaspl" % "1.1"
 
-To compile and generate an independent fat jar file from source:
+To compile and generate an independent fat jar file from source, use [SBT](http://www.scala-sbt.org/):
 
     sbt assembly
 
-The jar file **scalaspl-1.1.jar** will be in the *./target/scala-2.12* directory.
+The jar file **scalaspl-1.2-SNAPSHOT.jar** will be in created in the *./target/scala-2.12* directory.
+
 
 ## How to use
 
@@ -60,6 +61,7 @@ From *Example.scala*:
         println()
         psl.domainLevels(domain).foreach(lvl => println("domainLevels: " + lvl))
 
+
 To read the PSL directly from reference 1, you need to be connected to the internet and 
 have the following property set in the configuration file *application.conf*:
  
@@ -70,6 +72,7 @@ If you do not want to read the list from the internet, but from a local file, us
     psl.url="file:///Users/.../scalaPSL/src/main/resources/public_suffix_list.dat"
 
 See *application.conf* example in the *./src/main/resources* directory.
+
 ## References
 
 1) [The Public Suffix List](https://publicsuffix.org/)
