@@ -5,9 +5,9 @@ organization := "com.github.workingDog"
 
 version := (version in ThisBuild).value
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.5"
 
-libraryDependencies ++= Seq("com.typesafe" % "config" % "1.3.2")
+libraryDependencies ++= Seq("com.typesafe" % "config" % "1.3.3")
 
 homepage := Some(url("https://github.com/workingDog/scalaPSL"))
 
