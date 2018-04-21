@@ -25,24 +25,25 @@ object BasicChecker {
   def isValid(input: String, printError: Boolean): Boolean = {
     if (input == null) false
     else {
-      var check = false
+      var numValid = 0
       val ascii = IDN.toASCII(input)
+      val labels = ascii.split('.')
       ascii match {
         case str if str.length < 1 => if (printError) println(DOMAIN_TOO_SHORT + " input: " + input)
         case str if str.length > 255 => if (printError) println(DOMAIN_TOO_LONG + " input: " + input)
         case _ =>
-          for (label <- ascii.split('.')) {
+          for (label <- labels) {
             label match {
               case lbl if lbl.length < 1 => if (printError) println(LABEL_TOO_SHORT + " input: " + input)
               case lbl if lbl.length > 63 => if (printError) println(LABEL_TOO_LONG + " input: " + input)
               case lbl if lbl.charAt(0) == '-' => if (printError) println(LABEL_STARTS_WITH_DASH + " input: " + input)
               case lbl if lbl.charAt(lbl.length - 1) == '-' => if (printError) println(LABEL_ENDS_WITH_DASH + " input: " + input)
               case lbl if ! """^[a-z0-9\-]+$""".r.pattern.matcher(lbl.toLowerCase).matches => if (printError) println(LABEL_INVALID_CHARS + " input: " + input)
-              case _ => check = true
+              case _ => numValid += 1
             }
           }
       }
-      check
+      numValid == labels.length
     }
   }
 
