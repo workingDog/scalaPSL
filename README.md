@@ -1,6 +1,6 @@
 # Public Suffix List Scala API
 
-This Scala library (**scalaspl**) presents a simple API to use the Public Suffix List[1]. With this library you can parse a **URL** into its component subdomains, such as: Top Level Domain (TLD), 
+This Scala library (**scalapsl**) presents a simple API to use the Public Suffix List[1]. With this library you can parse a **URL** into its component subdomains, such as: Top Level Domain (TLD), 
 Second Level Domain (SLD), Third Level Domain (TRD), etc... registrable domain and public suffix parts.
 
 From the [Public Suffix List](https://publicsuffix.org/):
@@ -27,15 +27,17 @@ The Public Suffix List is a list of simple rules for all known public suffixes, 
 
 ## Installation
 
-Add the following dependency to your application build.sbt:
+Add the following dependency to your application *build.sbt*:
 
     libraryDependencies += "com.github.workingDog" %% "scalaspl" % "1.1"
+
+Note the typo in the library name, should have been scalapsl.
 
 To compile and generate an independent fat jar file from source, use [SBT](http://www.scala-sbt.org/):
 
     sbt assembly
 
-The jar file **scalaspl-1.2-SNAPSHOT.jar** will be in created in the *./target/scala-2.12* directory.
+The jar file **scalapsl-1.2-SNAPSHOT.jar** will be in created in the *./target/scala-2.12* directory.
 
 
 ## How to use
