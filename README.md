@@ -29,7 +29,7 @@ The Public Suffix List is a list of simple rules for all known public suffixes, 
 
 Add the following dependency to your application *build.sbt*:
 
-    libraryDependencies += "com.github.workingDog" %% "scalaspl" % "1.1"
+    libraryDependencies += "com.github.workingDog" %% "scalaspl" % "1.2"
 
 Note the typo in the library name, should have been scalapsl.
 
@@ -37,7 +37,7 @@ To compile and generate an independent fat jar file from source, use [SBT](http:
 
     sbt assembly
 
-The jar file **scalapsl-1.2-SNAPSHOT.jar** will be in created in the *./target/scala-2.12* directory.
+The jar file **scalapsl-1.3-SNAPSHOT.jar** will be in created in the *./target/scala-2.12* directory.
 
 
 ## How to use
@@ -85,7 +85,7 @@ See *application.conf* example in the *./src/main/resources* directory.
 
 ## Dependencies
 
-Uses scala 2.12.4 and TypeSafe [Configuration library for JVM languages](https://github.com/typesafehub/config). 
+Uses scala 2.12.8 and TypeSafe [Configuration library for JVM languages](https://github.com/typesafehub/config). 
 The latest *Public Suffix List* can be obtained from [The Public Suffix List on github](https://github.com/publicsuffix/list). 
 
 ## Status 

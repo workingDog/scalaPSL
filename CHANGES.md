@@ -1,7 +1,11 @@
 Change Log
 ==========
 
-## changes in 1.2-SNAPSHOT
+## changes in 1.3-SNAPSHOT
+
+
+
+## changes in 1.2
 
 * merged pull request fixing bug enforcing validity on all labels in BasicChecker.scala 
 * updated scala, project, sbt and dependencies

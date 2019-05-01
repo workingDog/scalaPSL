@@ -5,15 +5,13 @@ organization := "com.github.workingDog"
 
 version := (version in ThisBuild).value
 
-scalaVersion := "2.12.5"
+scalaVersion := "2.12.8"
 
-libraryDependencies ++= Seq("com.typesafe" % "config" % "1.3.3")
-
-homepage := Some(url("https://github.com/workingDog/scalaPSL"))
-
-licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
+libraryDependencies += "com.typesafe" % "config" % "1.3.4"
 
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-Xlint")
+
+test in assembly := {}
 
 assemblyMergeStrategy in assembly := {
   case PathList(xs@_*) if xs.last.toLowerCase endsWith ".dsa" => MergeStrategy.discard
